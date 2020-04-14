@@ -2,7 +2,6 @@
 __pycache__/
 .DS_Store
 *.egg-info
-venv/
 dist/
 .coverage
 coverage.xml
@@ -11,4 +10,4 @@ coverage.xml
 /.envrc
 /.env
 db.sqlite3
-/.venv/pyvenv.cfg
+/.venv/
