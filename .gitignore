@@ -11,3 +11,4 @@ coverage.xml
 /.envrc
 /.env
 db.sqlite3
+/.venv/pyvenv.cfg
