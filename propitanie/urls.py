@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from followers.views import new_user
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('new_user/', new_user)
 ]
