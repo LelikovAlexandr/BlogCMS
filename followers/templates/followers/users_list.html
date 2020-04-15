@@ -1,0 +1,19 @@
+{% extends 'followers/main.html' %}
+{% block content %}
+<table class="table table-striped table-sm col-6">
+    <thead>
+    <tr>
+        <th scope="col">Имя</th>
+        <th scope="col">Подписана до</th>
+    </tr>
+    </thead>
+    <tbody>
+    {%for user in users_list%}
+    <tr>
+        <td>{{ user.name }}</td>
+        <td>{{ user.subscribe_until|date:'d E Y' }}</td>
+    </tr>
+    {%endfor%}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,23 +1,13 @@
-"""propitanie URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path
-from followers.views import new_user
+from followers.views import new_order, list_of_users, create_order, \
+    list_of_orders, get_difference
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('new_user/', new_user)
+    path('admin/', admin.site.urls, ),
+    path('new_order/', new_order),
+    path('users/', list_of_users, name='Users'),
+    path('create_order/', create_order, name='New order'),
+    path('orders/', list_of_orders, name='Orders'),
+    path('difference/', get_difference, name='Difference')
 ]

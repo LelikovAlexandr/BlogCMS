@@ -1,0 +1,38 @@
+{% extends 'followers/main.html' %}
+{% block content %}
+
+<div class="mr-3">
+    <h4 class="mb-1">Оплатили, но нет в подписчиках</h4>
+    <table class="table table-striped mb-2 table-sm col-12">
+        <thead>
+        <tr>
+            <th scope="col">Имя</th>
+        </tr>
+        </thead>
+        <tbody>
+        {%for user in paid_by_not_followers%}
+        <tr>
+            <td>{{ user }}</td>
+        </tr>
+        {%endfor%}
+        </tbody>
+    </table>
+</div>
+<div>
+    <h4 class="mb-1">В подписчиках, но не оплатили</h4>
+    <table class="table table-striped table-sm col-12">
+        <thead>
+        <tr>
+            <th scope="col">Имя</th>
+        </tr>
+        </thead>
+        <tbody>
+        {%for user in followers_by_not_paid%}
+        <tr>
+            <td>{{ user }}</td>
+        </tr>
+        {%endfor%}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
