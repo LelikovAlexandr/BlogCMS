@@ -1,10 +1,23 @@
 {% extends 'followers/main.html' %}
 {% block content %}
 <form action="/create_order/" method="post">
-        <input class="form-control mb-1 mt-2 col-12" placeholder="Username" name="client_name">
-        <input class="form-control mb-1 col-12" placeholder="Email" name="client_email">
-        <input class="form-control mb-1 col-12" placeholder="Order ID" name="order_id">
-        <input class="form-control mb-1 col-12" placeholder="Amount" name="amount">
-        <button class="btn btn-success" type="submit">Submit</button>
+    <input class="form-control mb-1 mt-2 col-12" placeholder="Username" name="client_name">
+    <input class="form-control mb-1 col-12" placeholder="Email" name="client_email">
+    <input class="form-control mb-1 col-12" placeholder="Order ID" name="order_id">
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="amount" id="Month" value="350.00" checked>
+        <label class="form-check-label" for="Month">
+            Месяц
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="amount" id="HalfYear" value="1800.00" checked>
+        <label class="form-check-label" for="HalfYear">
+            Полгода
+        </label>
+    </div>
+    <input class="form-control mb-1 col-12" placeholder="Signature" name="signature">
+    <button class="btn btn-success" type="submit">Submit</button>
+
 </form>
 {% endblock %}

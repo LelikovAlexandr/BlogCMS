@@ -4,6 +4,7 @@ from django.db import models
 class User(models.Model):
     name = models.CharField(max_length=30, unique=True)
     email = models.CharField(max_length=30, null=True)
+    created_date = models.DateField(auto_now_add=True)
     subscribe_until = models.DateTimeField(null=True)
 
     class Meta:

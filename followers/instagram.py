@@ -8,18 +8,22 @@ from propitanie.settings import BASE_DIR
 load_dotenv()
 
 
-def inst():
-    if cache.get('instagram') is None:
-        instagram = Instagram()
+def login():
+    instagram = Instagram()
 
-        instagram.with_credentials(os.getenv('INSTAGRAM_LOGIN'),
-                                   os.getenv('INSTAGRAM_PASSWORD'),
-                                   os.path.join(BASE_DIR, 'cache',
-                                                'instagram/'))
-        instagram.login(force=False, two_step_verificator=False)
+    instagram.with_credentials(os.getenv('INSTAGRAM_LOGIN'),
+                               os.getenv('INSTAGRAM_PASSWORD'),
+                               os.path.join(BASE_DIR, 'cache',
+                                            'instagram/'))
+    instagram.login(force=False, two_step_verificator=False)
 
-        sleep(2)
+    sleep(2)
+    return instagram
 
+
+def get_followers():
+    if cache.get('followers') is None:
+        instagram = login()
         username = os.getenv('INSTAGRAM_USER')
         account = instagram.get_account(username)
         sleep(1)
@@ -28,5 +32,5 @@ def inst():
         result = []
         for follower in followers['accounts']:
             result.append(follower.username)
-        cache.set('instagram', set(result), 300)
-    return cache.get('instagram')
+        cache.set('followers', set(result), 300)
+    return cache.get('followers')
