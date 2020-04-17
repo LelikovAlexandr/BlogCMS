@@ -64,8 +64,18 @@ def list_of_orders(request):
 #
 def list_of_today_users(request):
     today_users = User.objects.filter(created_date=datetime.date.today())
+    number_of_users = number_of_paid_users()
     return render(request, 'followers/today_users_list.html',
-                  context={'today_users': today_users})
+                  context={'today_users': today_users,
+                           'number_of_paid_users': number_of_users,
+                           'earning': number_of_users * 350}
+                  )
+
+
+def number_of_paid_users():
+    return User.objects.filter(
+        subscribe_until__lte=datetime.datetime(2021, 1, 1, 14, 51, 13)).count()
+
 
 def get_difference(request):
     set_of_followers = get_followers()
