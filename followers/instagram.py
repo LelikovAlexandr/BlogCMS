@@ -15,7 +15,7 @@ def login():
                                os.getenv('INSTAGRAM_PASSWORD'),
                                os.path.join(BASE_DIR, 'cache',
                                             'instagram/'))
-    instagram.login(force=False, two_step_verificator=False)
+    instagram.login(force=False, two_step_verificator=True)
 
     sleep(2)
     return instagram
