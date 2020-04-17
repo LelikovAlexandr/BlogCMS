@@ -11,3 +11,5 @@ coverage.xml
 /.env
 db.sqlite3
 /.venv/
+/fixtures/
+/cache/

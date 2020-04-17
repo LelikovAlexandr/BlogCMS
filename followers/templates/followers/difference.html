@@ -12,7 +12,7 @@
         <tbody>
         {%for user in paid_by_not_followers%}
         <tr>
-            <td>{{ user }}</td>
+            <td><a href="{% url 'UserEdit' pk=user.pk %}">{{ user }}</a></td>
         </tr>
         {%endfor%}
         </tbody>

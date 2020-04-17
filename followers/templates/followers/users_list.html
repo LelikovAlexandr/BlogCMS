@@ -1,5 +1,14 @@
 {% extends 'followers/main.html' %}
 {% block content %}
+<script>
+    function deleteFunction(form) {
+        if (confirm("Are you sure you want to delete?")) {
+            form.submit();
+        } else {
+            form.preventDefault();
+        }
+    }
+</script>
 <table class="table table-striped table-sm col-6">
     <thead>
     <tr>
@@ -10,8 +19,15 @@
     <tbody>
     {%for user in users_list%}
     <tr>
-        <td>{{ user.name }}</td>
+        <td><a href="{% url 'UserEdit' pk=user.pk %}">{{ user.name }}</a></td>
         <td>{{ user.subscribe_until|date:'d E Y' }}</td>
+        <td>
+            <form method="POST" action="{% url 'UserDelete' pk=user.id %}" id="delete_tag">
+                <button type="button" class="btn btn-sm btn-danger" onClick="deleteFunction(this.form)">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+            </form>
+        </td>
     </tr>
     {%endfor%}
     </tbody>

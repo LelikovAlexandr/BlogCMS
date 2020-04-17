@@ -6,6 +6,9 @@ class User(models.Model):
     email = models.CharField(max_length=30, null=True)
     subscribe_until = models.DateTimeField(null=True)
 
+    class Meta:
+        ordering = ["subscribe_until"]
+
     def __str__(self):
         return self.name
 

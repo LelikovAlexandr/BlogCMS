@@ -1,0 +1,16 @@
+{% extends 'followers/main.html' %}
+{% block content %}
+<div class="d-flex flex-column">
+    <form method="post" id="edit">
+        <label for="id_name" class="mt-2">Имя пользователя</label>
+        <input type="text" name="name" class="form-control mb-1" value="{{ form.name.value }}" required id="id_name">
+        <label for="id_subscribe_until">Подписка до</label>
+        <input type="text" name="subscribe_until" class="form-control mb-2"
+               value="{{ form.subscribe_until.value|date:'d.m.Y G:i:s' }}" required id="id_subscribe_until">
+    </form>
+    <div class="d-flex justify-content-between">
+        <button type="submit" class="btn btn-success" form="edit">Edit</button>
+        <a href="{%url 'Difference' %}" class="btn btn-danger">Cancel</a>
+    </div>
+</div>
+{% endblock %}
