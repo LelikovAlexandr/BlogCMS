@@ -17,6 +17,7 @@ services:
     build: .
     restart: always
     environment:
+      - DEBUG=
       - SECRET_KEY=
       - SECRET_KEY_MODULBANK=
       - TEST_SIGNATURE=
