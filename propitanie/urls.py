@@ -1,8 +1,10 @@
+from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
-from followers.views import new_order, list_of_users, \
-    list_of_orders, get_difference, UserEdit, UserDelete, list_of_today_users
-from django.conf.urls import url
+
+from followers.views import (UserDelete, UserEdit, get_difference,
+                             list_of_orders, list_of_today_users,
+                             list_of_users, new_order)
 
 urlpatterns = [
     path('admin/', admin.site.urls, ),

@@ -1,5 +1,6 @@
 from django.contrib import admin
-from followers.models import User, Order
+
+from followers.models import Order, User
 
 # Register your models here.
 

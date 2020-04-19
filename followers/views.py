@@ -1,14 +1,16 @@
-from django.shortcuts import render
-from followers.models import User, Order
-from followers.modulbank import get_signature
-from dateutil.relativedelta import relativedelta
-from django.utils import timezone
-from dotenv import load_dotenv
-import os
-from followers.instagram import get_followers
-from django.views.generic.edit import UpdateView, DeleteView
-from django.urls import reverse_lazy
 import datetime
+import os
+
+from dateutil.relativedelta import relativedelta
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.utils import timezone
+from django.views.generic.edit import DeleteView, UpdateView
+from dotenv import load_dotenv
+
+from followers.instagram import get_followers
+from followers.models import Order, User
+from followers.modulbank import get_signature
 
 load_dotenv()
 
@@ -19,9 +21,9 @@ def new_order(request):
         if get_signature(os.getenv('SECRET_KEY_MODULBANK'), data) == \
                 data.get('signature') or data.get('signature') == os.getenv(
             'TEST_SIGNATURE'):
-            user, create = User.objects.update_or_create(
-                name=data.get('client_name')
-            )
+            name = data.get('client_name').replace('@', '').replace(' ',
+                                                                    '').lower()
+            user, create = User.objects.update_or_create(name=name)
             user.email = data.get('client_email')
             if create:
                 start_new_period = timezone.now()
@@ -36,7 +38,7 @@ def new_order(request):
             user.save()
 
             order = Order()
-            order.username = User.objects.get(name=data.get('client_name'))
+            order.username = User.objects.get(name=name)
             order.order_id = data.get('order_id')
             order.amount = data.get('amount')
             order.save()

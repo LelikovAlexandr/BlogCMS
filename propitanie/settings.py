@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -27,9 +28,9 @@ DOTENV_FILE = os.path.join(BASE_DIR, ".env")
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', False)
 
-ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',')
 
 CACHES = {
     'default': {

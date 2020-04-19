@@ -1,8 +1,10 @@
-from igramscraper.instagram import Instagram
-from time import sleep
-from django.core.cache import cache
 import os
+from time import sleep
+
+from django.core.cache import cache
 from dotenv import load_dotenv
+from igramscraper.instagram import Instagram
+
 from propitanie.settings import BASE_DIR
 
 load_dotenv()

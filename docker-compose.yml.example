@@ -26,8 +26,9 @@ services:
       - POSTGRES_DB_ADDR=postgres
       - POSTGRES_DB_PORT=5432
       - DJANGO_SETTINGS_MODULE=propitanie.settings
-    command: gunicorn propitanie.wsgi --bind 0.0.0.0:80
+    command:
+      bash -c "python manage.py migrate && gunicorn --workers 3  propitanie.wsgi --bind :8000"
     depends_on:
       - postgres
     ports:
-      - 80:80
+      - 80:8000
