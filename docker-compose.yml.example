@@ -1,0 +1,33 @@
+version: '3.3'
+
+volumes:
+  postgres_db:
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=
+    volumes:
+      - postgres_db:/var/lib/postgresql/data
+    restart: always
+    ports:
+      - 5432:5432
+  web:
+    build: .
+    restart: always
+    environment:
+      - SECRET_KEY=
+      - SECRET_KEY_MODULBANK=
+      - TEST_SIGNATURE=
+      - POSTGRES_DB_NAME=
+      - POSTGRES_DB_USER=
+      - POSTGRES_DB_PASSWORD=
+      - POSTGRES_DB_ADDR=postgres
+      - POSTGRES_DB_PORT=5432
+      - DJANGO_SETTINGS_MODULE=propitanie.settings
+    command: gunicorn propitanie.wsgi --bind 0.0.0.0:80
+    depends_on:
+      - postgres
+    ports:
+      - 80:80

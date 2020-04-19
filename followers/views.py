@@ -16,7 +16,7 @@ load_dotenv()
 def new_order(request):
     if request.method == 'POST':
         data = request.POST.dict()
-        if get_signature(os.getenv('TEST_SECRET_KEY_MODULBANK'), data) == \
+        if get_signature(os.getenv('SECRET_KEY_MODULBANK'), data) == \
                 data.get('signature') or data.get('signature') == os.getenv(
             'TEST_SIGNATURE'):
             user, create = User.objects.update_or_create(

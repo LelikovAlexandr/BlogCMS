@@ -4,6 +4,6 @@ django-heroku
 python-dotenv
 python-dateutil
 django-bootstrap4
-requests
+requests==2.21.0
 igramscraper
 django-fa

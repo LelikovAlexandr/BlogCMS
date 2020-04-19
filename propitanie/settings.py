@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1', '0.0.0.0']
 
 CACHES = {
     'default': {
@@ -84,13 +84,24 @@ WSGI_APPLICATION = 'propitanie.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if os.getenv('SQLite'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+else:
+    DATABASES = {
+       'default': {
+           'ENGINE': 'django.db.backends.postgresql_psycopg2',
+           'NAME': os.getenv('POSTGRES_DB_NAME'),
+           'USER': os.getenv('POSTGRES_DB_USER'),
+           'PASSWORD': os.getenv('POSTGRES_DB_PASSWORD'),
+           'HOST': os.getenv('POSTGRES_DB_ADDR'),
+           'PORT': os.getenv('POSTGRES_DB_PORT'),
+       }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
