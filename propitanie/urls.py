@@ -14,7 +14,7 @@ urlpatterns = [
     path('difference/', get_difference, name='Difference'),
     path('', list_of_today_users, name='TodayUsers'),
     path('change_status/', change_user_status, name='ChangeUserStatus'),
-    path('accounts/login/', LoginUser.as_view(), name='LogiUser'),
+    path('accounts/login/', LoginUser.as_view(), name='LoginUser'),
     url(r'^name/(?P<pk>\d+)/edit/$', UserEdit.as_view(), name='UserEdit'),
     url(r'^name/(?P<pk>\d+)/delete/$', UserDelete.as_view(), name='UserDelete')
 ]

@@ -1,7 +1,7 @@
 {% extends 'followers/main.html' %}
 {% block content %}
 <div class="d-flex flex-column align-items-center col-12">
-    <div class="card-deck h-100">
+    <div class="card-deck mt-2 mb-2 h-100">
         <div class="card text-center">
             <div class="card-img-top">
                 Заработок в месяц
@@ -20,42 +20,32 @@
         </div>
     </div>
     {% if today_users %}
-    <div><h4 class="mb-3 ">Новые пользователи за сегодня</h4></div>
-    <table class="table table-striped col-lg-6 col-md-12 col-sm-12 col-xs-12">
+    <div><h4 class="mb-3 ">Новые пользователи за сегодня - {{ today_users_count }}</h4></div>
+    <table class="table col-lg-6 col-md-12 col-sm-12 col-xs-12">
         <thead>
         <tr>
             <th scope="col">Имя</th>
             <th scope="col">Подписан до</th>
-            <th></th>
+            <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
         {%for user in today_users%}
-        <tr>
-            {% if user.status.name == "Not added" %}
-            <td>
-                <a href="{% url 'UserEdit' pk=user.pk %}" class="text-danger">{{ user.name }}</a>
-            </td>
-            <td class="text-danger">
-                {{ user.subscribe_until|date:'d E Y' }}
-            </td>
+        {% if user.status.name == "Not added" %}
+        <tr class="table-danger">
             {% elif user.status.name == "Sent request" %}
-            <td>
-                <a href="{% url 'UserEdit' pk=user.pk %}" class="text-warning">{{ user.name }}</a>
-            </td>
-            <td class="text-warning">
-                {{ user.subscribe_until|date:'d E Y' }}
-            </td>
+        <tr class="table-warning">
             {% else %}
-            <td>
-                <a href="{% url 'UserEdit' pk=user.pk %}" class="text-success">{{ user.name }}</a>
+        <tr class="table-success">
+            {% endif %}
+            <td class="align-middle">
+                <a href="{% url 'UserEdit' pk=user.pk %}" class="text-dark"><h3>{{ user.name }}</h3></a>
             </td>
-            <td class="text-success">
+            <td class="align-middle">
                 {{ user.subscribe_until|date:'d E Y' }}
             </td>
-            {% endif %}
-            <td class="d-flex justify-content-end">
-                <div class="d-flex">
+            <td>
+                <div class="d-flex justify-content-end">
                     <form action="{% url 'ChangeUserStatus' %}" method="post">
                         <input type="hidden" value="{{ user.name }}" name="name">
                         <input type="hidden" value="Sent request" name="status">

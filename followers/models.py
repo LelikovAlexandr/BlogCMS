@@ -7,6 +7,7 @@ class Status(models.Model):
     def __str__(self):
         return self.name
 
+
 class User(models.Model):
     name = models.CharField(max_length=30, unique=True)
     email = models.CharField(max_length=30, null=True)

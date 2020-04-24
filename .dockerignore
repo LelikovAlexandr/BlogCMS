@@ -12,3 +12,9 @@ db.sqlite3
 /.venv/
 /fixtures/
 /cache/
+/sessions/
+/nginx/
+.gitignore
+poetry.lock
+pyproject.toml
+README.md

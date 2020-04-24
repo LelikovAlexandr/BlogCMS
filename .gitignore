@@ -14,3 +14,4 @@ db.sqlite3
 /fixtures/
 /cache/
 /docker-compose.yml
+/sessions/

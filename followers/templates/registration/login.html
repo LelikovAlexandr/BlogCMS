@@ -1,6 +1,8 @@
 {% extends 'followers/main.html' %}
 {% block content %}
-<form>
+
+<form method="post">
+    {% csrf_token %}
     {{ form.as_table}}
     <button class="btn btn-success" type="submit">Вход</button>
 </form>

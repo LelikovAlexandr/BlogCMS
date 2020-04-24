@@ -1,9 +1,9 @@
 django
 gunicorn
-django-heroku
 python-dotenv
 python-dateutil
 django-bootstrap4
 requests==2.21.0
-igramscraper
+git+https://github.com/realsirjoe/instagram-scraper.git
 django-fa
+psycopg2

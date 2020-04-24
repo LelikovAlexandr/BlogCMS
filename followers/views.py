@@ -12,6 +12,8 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from dotenv import load_dotenv
 
+from operator import attrgetter
+
 from followers.instagram import get_followers
 from followers.models import Order, User, Status
 from followers.modulbank import get_signature
@@ -71,7 +73,10 @@ def change_user_status(request):
 def list_of_users(request):
     all_users = User.objects.filter(subscribe_until__gt=timezone.now())
     return render(request, 'followers/users_list.html',
-                  context={'users_list': all_users})
+                  context={'users_list': sorted(all_users,
+                                                key=attrgetter(
+                                                    'subscribe_until',
+                                                    'name'))})
 
 
 @require_GET
@@ -88,8 +93,11 @@ def list_of_today_users(request):
     today_users = User.objects.filter(created_date=datetime.date.today())
     today_users_count = today_users.count()
     number_of_users = number_of_paid_users()
+
     return render(request, 'followers/today_users_list.html',
-                  context={'today_users': today_users,
+                  context={'today_users': sorted(today_users,
+                                                 key=attrgetter('status.id',
+                                                                'name')),
                            'number_of_paid_users': number_of_users,
                            'earning': number_of_users * 350,
                            'today_users_count': today_users_count, }
