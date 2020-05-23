@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="{% static 'assets/fonts/fontawesome5-overrides.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/styles.min.css' %}">
+</head>
+<body>
+<div class="projects-clean">
+    <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
+        <div class="container"><a class="navbar-brand" href="/">PROpitanie.blog</a>
+            {% if user.is_authenticated %}
+                <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span
+                        class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navcol-1">
+                    <ul class="nav navbar-nav mr-auto">
+                        <li class="nav-item" role="presentation"><a
+                                class="nav-link {% if request.resolver_match.url_name == "UserAccount" %}active{% endif %}"
+                                href="{% url 'UserAccount' %}">Видео</a></li>
+                        <li class="nav-item" role="presentation"><a
+                                class="nav-link {% if request.resolver_match.url_name == "RenewSubscription" %}active{% endif %}"
+                                href="{% url 'RenewSubscription' %}">Продлить подписку</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        {% if user.subscribe_until %}
+                            <li class="navbar-text" role="presentation">Ваша подписка активна до&nbsp;</li>
+                            <li class="navbar-text font-weight-bold"
+                                role="presentation">{{ user.subscribe_until|date:'j E' }}</li>
+                        {% endif %}
+                        <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#">Профиль</a>
+                            <div class="dropdown-menu" role="menu"><h6 class="dropdown-header" role="presentation">{{ user.username }}</h6><a class="dropdown-item" role="presentation" href="{% url 'ChangeUserPassword' %}">Изменить пароль</a><a class="dropdown-item" role="presentation" href="{% url 'LogoutUser' %}">Выйти</a></div>
+                        </li>
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+    </nav>
+    {% block content %}
+    {% endblock %}
+</div>
+<div class="footer-clean">
+    <footer>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-sm-4 col-md-3 item">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Web design</a></li>
+                        <li><a href="#">Development</a></li>
+                        <li><a href="#">Hosting</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-md-3 item">
+                    <h3>About</h3>
+                    <ul>
+                        <li><a href="#">Company</a></li>
+                        <li><a href="#">Team</a></li>
+                        <li><a href="#">Legacy</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-md-3 item">
+                    <h3>Careers</h3>
+                    <ul>
+                        <li><a href="#">Job openings</a></li>
+                        <li><a href="#">Employee success</a></li>
+                        <li><a href="#">Benefits</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 item social">
+                    <a href="#"><i class="icon ion-social-facebook"></i></a>
+                    <a href="#"><i class="icon ion-social-instagram"></i></a>
+                    <p class="copyright">PROpitanie.blog© 2020</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+<script src="{% static 'assets/js/script.min.js' %}"></script>
+</body>
+
+</html>

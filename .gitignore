@@ -11,7 +11,8 @@ coverage.xml
 /.env
 db.sqlite3
 /.venv/
-/fixtures/
 /cache/
 /docker-compose.yml
 /sessions/
+env-*
+!/staticfiles/

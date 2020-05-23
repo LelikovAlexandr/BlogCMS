@@ -1,0 +1,16 @@
+ [ {
+    "model": "cms.price",
+    "pk": 1,
+    "fields": {
+      "number_of_months": 1,
+      "price": 350
+    }
+  },
+  {
+    "model": "cms.price",
+    "pk": 2,
+    "fields": {
+      "number_of_months": 6,
+      "price": 1800
+    }
+  }]

@@ -10,7 +10,6 @@ coverage.xml
 /.env
 db.sqlite3
 /.venv/
-/fixtures/
 /cache/
 /sessions/
 /nginx/
@@ -18,3 +17,7 @@ db.sqlite3
 poetry.lock
 pyproject.toml
 README.md
+/env-blogserver
+/staticfiles/
+/docker-compose.yml
+/.github/

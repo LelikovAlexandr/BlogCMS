@@ -1,0 +1,8 @@
+{% extends 'main.html' %}
+{% block title %}Добавить тэг{% endblock %}
+{% block content %}
+<form method="post">
+    {{ form.as_p }}
+    <button type="submit">Добавить</button>
+</form>
+{% endblock %}

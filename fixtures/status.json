@@ -1,0 +1,30 @@
+[
+  {
+    "model": "users.UserStatus",
+    "pk": 1,
+    "fields": {
+      "name": "Not added"
+    }
+  },
+  {
+    "model": "users.UserStatus",
+    "pk": 2,
+    "fields": {
+      "name": "Sent request"
+    }
+  },
+  {
+    "model": "users.UserStatus",
+    "pk": 3,
+    "fields": {
+      "name": "Added"
+    }
+  },
+  {
+    "model": "users.UserStatus",
+    "pk": 4,
+    "fields": {
+      "name": "Renewal"
+    }
+  }
+]

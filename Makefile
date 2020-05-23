@@ -10,14 +10,14 @@ test:
 	coverage xml
 
 runserver:
-	poetry run python3 manage.py runserver
+	python3 manage.py runserver
 
 runshell:
-	poetry run python3 manage.py shell
+	python3 manage.py shell
 
 migrate:
-	poetry run python3 manage.py makemigrations
-	poetry run python3 manage.py migrate
+	python3 manage.py makemigrations
+	python3 manage.py migrate
 
 build:
 	poetry build
@@ -25,4 +25,6 @@ build:
 publish: build
 	poetry publish -r $(REPO) -u $(USER) -p $(PASSWORD)
 
-
+dp:
+	docker build -t lelikov/propitanie:2.0.0 .
+	docker push lelikov/propitanie

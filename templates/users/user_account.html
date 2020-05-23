@@ -1,0 +1,30 @@
+{% extends 'users/main.html' %}
+{% load static %}
+{% block title %}Личный кабинет{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="intro">
+            <h2 class="text-center">Видео</h2>
+            <p class="text-center">Nunc luctus in metus eget fringilla. Aliquam sed justo ligula. Vestibulum nibh erat,
+                pellentesque ut laoreet vitae. </p>
+        </div>
+        <div class="row projects">
+            {% for video in user.available_video.all %}
+                <div class="col-sm-12 col-lg-6 col-xl-4 item">
+                    <iframe allowfullscreen=""
+                            src="https://www.youtube.com/embed/{{ video.video_code }}?iv_load_policy=3&modestbranding=1"
+                            width="320"
+                            height="180"></iframe>
+                    <h3 class="name">{{ video.caption }}</h3>
+                    <p class="description">{{ video.description }}</p>
+                    <div>
+                        {% for tag in video.tags.all %}
+                            <span class="badge badge-pill badge-secondary">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

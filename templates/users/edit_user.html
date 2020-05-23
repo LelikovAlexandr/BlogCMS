@@ -1,0 +1,31 @@
+{% extends 'main.html' %}
+{% block title %}{{ form.name.value }}{% endblock %}
+{% block content %}
+<div class="d-flex flex-column">
+    <form method="post" id="edit">
+        {{ form.non_field_errors }}
+
+        <label for="id_username" class="mt-2 mb-0">Имя пользователя</label>
+        <input type="text" name="username" class="form-control mb-2" value="{{ form.username.value }}" required id="id_username">
+        {{ form.name.errors }}
+
+        <label for="id_subscribe_until" class="mb-0">Подписка до</label>
+        <input type="text" name="subscribe_until" class="form-control mb-2"
+               value="{{ form.subscribe_until.value|date:'d.m.Y' }}" id="id_subscribe_until">
+        {{ form.subscribe_until.errors }}
+
+        <label for="id_email" class="mb-0">Email</label>
+        <input type="text" name="email" class="form-control mb-1" value="{{ form.email.value }}" required id="id_email">
+        {{ form.email.errors }}
+
+        <label>Подписан с {{ form.date_joined.value }}</label>
+        <input type="hidden" name="date_joined" value="{{ form.date_joined.value|date:'d.m.Y H:i:s' }}">
+        {{ form.date_joined.errors }}
+
+    </form>
+    <div class="d-flex justify-content-between">
+        <button type="submit" class="btn btn-success" form="edit">Edit</button>
+        <a href="#" class="btn btn-danger">Cancel</a>
+    </div>
+</div>
+{% endblock %}

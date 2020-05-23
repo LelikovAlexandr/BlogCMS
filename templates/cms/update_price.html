@@ -1,0 +1,17 @@
+{% extends 'main.html' %}
+{% block title %}Редактирование цены{% endblock %}
+{% block content %}
+<div class="d-flex flex-column">
+    <form method="post" id="edit">
+        <label for="id_name" class="mt-2">Количество месяцев</label>
+        <input type="text" name="number_of_months" class="form-control mb-1" value="{{ form.number_of_months.value }}" required id="id_name">
+        <label for="id_subscribe_until">Цена</label>
+        <input type="text" name="price" class="form-control mb-2"
+               value="{{ form.price.value }}" required id="id_subscribe_until">
+    </form>
+    <div class="d-flex justify-content-between">
+        <button type="submit" class="btn btn-success" form="edit">Edit</button>
+        <a href="{%url 'PriceList' %}" class="btn btn-danger">Cancel</a>
+    </div>
+</div>
+{% endblock %}

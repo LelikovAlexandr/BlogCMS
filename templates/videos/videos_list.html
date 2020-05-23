@@ -1,0 +1,67 @@
+{% extends 'main.html' %}
+{% block title %}Список видео{% endblock %}
+{% block content %}
+    <script>
+        function deleteFunction(form) {
+            if (confirm("Are you sure you want to delete?")) {
+                form.submit();
+            } else {
+                form.preventDefault();
+            }
+        }
+    </script>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-info" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="container-fluid">
+        <h3 class="text-dark mb-4">Видео</h3>
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="table-responsive-sm table-borderless table mt-2" id="dataTable" role="grid"
+                     aria-describedby="dataTable_info">
+                    <table class="table table-striped table-bordered dataTable my-0" id="dataTable">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>Название</th>
+                            <th>Дата публикации</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for video in video_list %}
+                            <tr>
+                                <td class="align-middle">
+                                    <iframe allowfullscreen=""
+                                            src="https://www.youtube.com/embed/{{ video.video_code }}?iv_load_policy=3&modestbranding=1"
+                                            width="160"
+                                            height="90"></iframe>
+                                </td>
+                                <td class="align-middle">{{ video.caption }}</td>
+                                <td class="align-middle">{{ video.publish_date }}</td>
+                                <td class="align-middle">
+                                    <form method="GET" action="{% url 'UpdateVideo' slug=video.slug %}">
+                                        <button type="submit" class="btn btn-sm btn-success">
+                                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                                        </button>
+                                    </form>
+                                    <form method="POST" action="{% url 'DeleteVideo' slug=video.slug %}">
+                                        <button type="button" class="btn btn-sm btn-danger"
+                                                onClick="deleteFunction(this.form)">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

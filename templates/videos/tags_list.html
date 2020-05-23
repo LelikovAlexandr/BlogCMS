@@ -1,0 +1,7 @@
+{% extends 'main.html' %}
+{% block title %}Список тэгов{% endblock %}
+{% block content %}
+{% for tag in tag_list%}
+<p>{{ tag.name }}</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'main.html' %}
+{% block title %}Добавить видео{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="card shadow-lg o-hidden border-0 my-5">
+            <div class="card-body p-0">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h4 class="text-dark mb-2">Изменить видео</h4>
+                            </div>
+                            <form class="user" method="post" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-user mb-2"
+                                           placeholder="Название" name="caption" value="{{ form.caption.value }}"
+                                           autofocus required/>
+                                    {% if form.caption.errors %}
+                                        <dl>
+                                            {% for error in form.caption.errors %}
+                                                <dd><small
+                                                        class="form-text text-danger mb-1">{{ error }}</small>
+                                                </dd>
+                                            {% endfor %}
+                                        </dl>
+                                    {% endif %}
+                                    <input type="text" class="form-control form-control-user mb-2"
+                                           placeholder="Код видео" name="video_code" value="{{ form.video_code.value }}"
+                                           required/>
+                                    {% if form.video_code.errors %}
+                                        <dl>
+                                            {% for error in form.video_code.errors %}
+                                                <dd><small
+                                                        class="form-text text-danger mb-1">{{ error }}</small>
+                                                </dd>
+                                            {% endfor %}
+                                        </dl>
+                                    {% endif %}
+                                    <input type="text" class="form-control form-control-user mb-2"
+                                           placeholder="Дата публикации" name="publish_date"
+                                           value="{{ form.publish_date.value|date:'d.m.Y' }}" required/>
+                                    {% if form.publish_date.errors %}
+                                        <dl>
+                                            {% for error in form.publish_date.errors %}
+                                                <dd><small
+                                                        class="form-text text-danger mb-1">{{ error }}</small>
+                                                </dd>
+                                            {% endfor %}
+                                        </dl>
+                                    {% endif %}
+                                    <textarea class="form-control" placeholder="Описание" name="description"
+                                              required>{{ form.description.value }}</textarea>
+                                    <button class="btn btn-primary btn-block text-white btn-user mt-2" type="submit">
+                                        Сохранить
+                                    </button>
+                                </div>
+                            </form>
+                            <div class="text-center"></div>
+                            <div class="text-center"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
