@@ -1,3 +1,8 @@
+NAME=lelikov/propitanie
+TAG=$(shell git log -1 --pretty=%h)
+IMG=${NAME}:${TAG}
+LATEST=${NAME}:latest
+
 install:
 	poetry install
 
@@ -25,6 +30,7 @@ build:
 publish: build
 	poetry publish -r $(REPO) -u $(USER) -p $(PASSWORD)
 
-dp:
-	docker build -t lelikov/propitanie:2.0.0 .
-	docker push lelikov/propitanie
+db:
+	docker build -t ${IMG} .
+	docker tag ${IMG} ${LATEST}
+
