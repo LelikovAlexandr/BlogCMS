@@ -34,3 +34,5 @@ db:
 	docker build -t ${IMG} .
 	docker tag ${IMG} ${LATEST}
 
+dp:
+	docker push ${NAME}

@@ -14,6 +14,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="{% static 'assets/fonts/fontawesome5-overrides.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/styles.min.css' %}">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'media/favicons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'media/favicons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'media/favicons/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'media/favicons/site.webmanifest' %}">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
 </head>
 <body>
 <div class="projects-clean">
@@ -37,8 +44,13 @@
                             <li class="navbar-text font-weight-bold"
                                 role="presentation">{{ user.subscribe_until|date:'j E' }}</li>
                         {% endif %}
-                        <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#">Профиль</a>
-                            <div class="dropdown-menu" role="menu"><h6 class="dropdown-header" role="presentation">{{ user.username }}</h6><a class="dropdown-item" role="presentation" href="{% url 'ChangeUserPassword' %}">Изменить пароль</a><a class="dropdown-item" role="presentation" href="{% url 'LogoutUser' %}">Выйти</a></div>
+                        <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown"
+                                                         aria-expanded="false" href="#">Профиль</a>
+                            <div class="dropdown-menu" role="menu"><h6 class="dropdown-header"
+                                                                       role="presentation">{{ user.username }}</h6><a
+                                    class="dropdown-item" role="presentation" href="{% url 'ChangeUserPassword' %}">Изменить
+                                пароль</a><a class="dropdown-item" role="presentation" href="{% url 'LogoutUser' %}">Выйти</a>
+                            </div>
                         </li>
                     </ul>
                 </div>

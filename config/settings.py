@@ -121,7 +121,7 @@ LOGGING = {
     },
     'handlers': {
         'file': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR, 'log/debug.log'),
             'formatter': 'simple',
@@ -129,7 +129,7 @@ LOGGING = {
     },
     'root': {
         'handlers': ['file'],
-        'level': 'DEBUG',
+        'level': 'INFO',
     },
 }
 

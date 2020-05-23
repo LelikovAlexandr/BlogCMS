@@ -12,6 +12,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static '/assets/fonts/fontawesome5-overrides.min.css' %}">
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'media/favicons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'media/favicons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'media/favicons/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'media/favicons/site.webmanifest' %}">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
 </head>
 {% if user.is_authenticated %}
 <body id="page-top">
