@@ -70,6 +70,7 @@ class ChangeUserPassword(LoginRequiredMixin, PasswordChangeView):
 class PasswordReset(PasswordResetView):
     template_name = 'users/password_reset.html'
     success_url = reverse_lazy('PasswordResetDone')
+    html_email_template_name = 'users/password_reset_email.html'
 
 
 class PasswordResetDone(PasswordResetDoneView):
