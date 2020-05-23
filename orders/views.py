@@ -79,6 +79,7 @@ class OrderCreate(CreateView):
     fields = '__all__'
     template_name = 'orders/create_order.html'
     success_url = reverse_lazy('Main')
+    extra_context = {'all_price': Price.objects.order_by('number_of_months')}
 
     def post(self, request, *args, **kwargs):
         data = request.POST.dict()

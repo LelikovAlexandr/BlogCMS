@@ -23,18 +23,14 @@
     <input class="form-control mb-1 mt-2 col-12" placeholder="Username" name="client_name">
     <input class="form-control mb-1 col-12" placeholder="Email" name="client_email">
     <input class="form-control mb-1 col-12" placeholder="Order ID" name="order_id">
+    {% for price in all_price %}
     <div class="form-check">
-        <input class="form-check-input" type="radio" name="amount" id="Month" value="350.00" checked>
-        <label class="form-check-label" for="Month">
-            Месяц
+        <input class="form-check-input" type="radio" name="amount" id="{{ price.number_of_months }}_month" value="{{ price.price }}.00" checked>
+        <label class="form-check-label" for="{{ price.number_of_months }}_month">
+            {{ price.number_of_months }} месяц, {{ price.price }}₽
         </label>
     </div>
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="amount" id="HalfYear" value="1800.00" checked>
-        <label class="form-check-label" for="HalfYear">
-            Полгода
-        </label>
-    </div>
+   {% endfor %}
     <input class="form-control mb-1 col-12" placeholder="Signature" name="signature">
     <button class="btn btn-success" type="submit">Submit</button>
 </form>
