@@ -83,7 +83,7 @@ class OrderCreate(CreateView):
 
     def post(self, request, *args, **kwargs):
         data = request.POST.dict()
-        username = data.get('client_name')
+        username = data.get('client_name').replace('@', '').replace(' ', '').lower()
         amount = int(float(data.get('amount')))
         order_id = data.get('order_id')
 
