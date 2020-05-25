@@ -49,7 +49,7 @@
                                 <input type="hidden" value="Added" name="status">
                             </form>
                         </td>
-                        <td class="align-middle font-weight-bold"><a class="text-muted" href="{% url 'UserEdit' pk=user.pk %}">{{ user.username }}</a></td>
+                        <td class="align-middle font-weight-bold"><a class="text-muted" href="https://www.instagram.com/{{ user.username }}">{{ user.username }}</a></td>
                         <td class="align-middle d-none d-sm-table-cell">{{ user.subscribe_until|date:'d.m' }}</td>
                         <td class="align-middle d-none d-sm-table-cell">{{ user.date_joined|date:'d.m' }}</td>
                     </tr>
