@@ -22,5 +22,6 @@ urlpatterns = [
     url(r'^change_status/$', staff_member_required(views.change_user_status),
         name='ChangeUserStatus'),
     url(r'^list/$', staff_member_required(views.UserList.as_view()), name='UsersList'),
-    url('renew/', views.RenewSubscription.as_view(), name='RenewSubscription'),
+    url('^renew/$', views.RenewSubscription.as_view(), name='RenewSubscription'),
+    url('^renew/generate_payment/$', views.generate_payment, name='GeneratePayment')
 ]

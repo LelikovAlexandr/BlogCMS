@@ -4,7 +4,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordResetView, \
     PasswordResetConfirmView, PasswordResetDoneView, PasswordResetCompleteView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
@@ -15,8 +15,36 @@ from users.models import User, UserStatus
 from django.utils.decorators import method_decorator
 from django.shortcuts import render
 import logging
+from orders.models import Order
+from django.db.models import Max
+from outer_modules.modulbank import get_signature
+from time import time
+import requests
+import os
 
 logger = logging.getLogger(__name__)
+
+
+@require_POST
+def generate_payment(request):
+    username = request.POST.get('username')
+    email = request.POST.get('email')
+    amount = request.POST.get('amount')
+
+    body = {
+        'merchant': os.getenv('MODULBANK_MERCHANT_ID'),
+        'amount': amount,
+        'order_id': int(Order.objects.aggregate(Max('order_id')).get('order_id__max')) + 1,
+        'client_name': username,
+        'client_email': email,
+        'description': 'Оплата доступа в блог',
+        'success_url': os.getenv('MODULBANK_SUCCESS_URL'),
+        'testing': os.getenv('MODULBANK_TEST', 0),
+        'unix_timestamp': int(time())
+    }
+    signature = {'signature': get_signature(os.getenv('MODULBANK_SECRET_KEY_NEW'), body)}
+    body.update(signature)
+    return HttpResponse(requests.post(os.getenv('MODULBANK_PAY_GATEWAY'), data=body))
 
 
 @require_POST
@@ -27,7 +55,7 @@ def change_user_status(request):
     status = data.get('status')
     logger.info(
         '{} have changed status for user {} from {} to {}'.format(request.user, user.username,
-                                                                user.status, status))
+                                                                  user.status, status))
     user.status = UserStatus.objects.get(name=status)
     user.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

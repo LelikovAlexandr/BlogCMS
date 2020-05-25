@@ -16,10 +16,9 @@
                                 {% endif %}
                             </h4>
                         </div>
-                        <form class="user">
+                        <form class="user" method="post" action="{% url 'GeneratePayment' %}">
                             <div class="form-group">
-                                <input type="email" class="form-control form-control-user"
-                                       id="exampleInputEmail" aria-describedby="emailHelp"
+                                <input type="text" class="form-control form-control-user"
                                        placeholder="Введите ваш Instagram" name="username"
                                        value="{{ user.username }}"/>
                                 <input type="email"
@@ -30,9 +29,9 @@
                                        name="email"
                                        value="{{ user.email }}"/>
                             </div>
-                            <select class="custom-select mt-0">
-                                <option value="undefined">1 месяц, 350₽</option>
-                                <option value="12" selected>6 месяцев, 1800₽</option>
+                            <select class="custom-select mt-0" name="amount">
+                                <option value="350.00">1 месяц, 350₽</option>
+                                <option value="1800.00" selected>6 месяцев, 1800₽</option>
                             </select>
                             <button
                                     class="btn btn-primary btn-block text-white btn-user mt-4" type="submit">Оплатить
