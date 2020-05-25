@@ -1,6 +1,7 @@
 import os
 
 from dotenv import load_dotenv
+import rollbar
 
 load_dotenv()
 
@@ -58,8 +59,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
 ]
-
 
 ROOT_URLCONF = 'config.urls'
 
@@ -126,10 +127,16 @@ LOGGING = {
             'filename': os.path.join(BASE_DIR, 'log/debug.log'),
             'formatter': 'simple',
         },
+        'rollbar': {
+            'access_token': os.getenv('ROLLBAR_ACCESS_TOKEN'),
+            'environment': 'development' if DEBUG else 'production',
+            'class': 'rollbar.logger.RollbarHandler'
+        },
     },
     'root': {
-        'handlers': ['file'],
+        'handlers': ['file', 'rollbar'],
         'level': 'INFO',
+        'propagate': True,
     },
 }
 
