@@ -32,7 +32,7 @@ def dashboard(request):
     nearest_unsubscribe_date = User.objects.filter(
         subscribe_until__gt=timezone.datetime.now().date()).aggregate(Min('subscribe_until')).get(
         'subscribe_until__min')
-    today_revenue = Order.objects.filter(created_datetime__date=timezone.now().date())
+    today_revenue = Order.objects.filter(created_datetime__date=timezone.now().date(), is_paid=True)
     context = {
         'today_users': sorted(today_users, key=attrgetter('status.id', 'username')),
         'number_of_paid_users': number_of_users,
