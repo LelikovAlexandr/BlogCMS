@@ -83,7 +83,7 @@ class OrderCreate(CreateView):
 
     def post(self, request, *args, **kwargs):
         data = request.POST.dict()
-        username = data.get('client_name').replace('@', '').replace(' ', '').lower()
+        username = data.get('client_name')
         amount = int(float(data.get('amount')))
         order_id = data.get('order_id')
 
@@ -104,10 +104,9 @@ class OrderCreate(CreateView):
             else:
                 send_email.delay(template, user.email, context=context)
                 result = 'Order created'
-            order = Order()
+            order = Order.objects.get(order_id=order_id)
+            order.is_paid = True
             order.username = User.objects.get(username=username)
-            order.order_id = order_id
-            order.amount = amount
             order.save()
             logger.debug('User {} with email {} created successful'.format(user.username, user.email))
         else:

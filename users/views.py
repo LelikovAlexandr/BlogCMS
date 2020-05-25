@@ -27,14 +27,14 @@ logger = logging.getLogger(__name__)
 
 @require_POST
 def generate_payment(request):
-    username = request.POST.get('username')
+    username = request.POST.get('username').replace('@', '').replace(' ', '').lower()
     email = request.POST.get('email')
     amount = request.POST.get('amount')
-
+    order_id = int(Order.objects.aggregate(Max('order_id')).get('order_id__max')) + 1
     body = {
         'merchant': os.getenv('MODULBANK_MERCHANT_ID'),
         'amount': amount,
-        'order_id': int(Order.objects.aggregate(Max('order_id')).get('order_id__max')) + 1,
+        'order_id': order_id,
         'client_name': username,
         'client_email': email,
         'description': 'Оплата доступа в блог',
@@ -44,6 +44,7 @@ def generate_payment(request):
     }
     signature = {'signature': get_signature(os.getenv('MODULBANK_SECRET_KEY_NEW'), body)}
     body.update(signature)
+    Order.objects.create(order_id=order_id, amount=int(float(amount)), is_paid=False)
     return HttpResponse(requests.post(os.getenv('MODULBANK_PAY_GATEWAY'), data=body))
 
 
