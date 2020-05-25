@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^price/create/$', views.PriceCreate.as_view(), name='PriceCreate'),
     url(r'^price/(?P<pk>\d+)/edit/$', views.PriceUpdate.as_view(), name='PriceUpdate'),
     url(r'^payments_rules/$', views.PaymentsRules.as_view(), name='PaymentsRules'),
+    url(r'^confidentiality/$', views.Confidentiality.as_view(), name='Confidentiality'),
 ]

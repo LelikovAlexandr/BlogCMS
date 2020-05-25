@@ -14,6 +14,8 @@ from cms.models import Price
 from orders.models import Order
 from outer_modules.instagram import get_followers
 from users.models import User, UserStatus
+
+
 # from django.db.models import Count
 
 # User.objects.filter(subscribe_until__gte=timezone.now().date()).values('subscribe_until').annotate(
@@ -105,3 +107,7 @@ class DeleteVideo(LoginRequiredMixin, DeleteView):
 
 class PaymentsRules(TemplateView):
     template_name = 'cms/payments_rules.html'
+
+
+class Confidentiality(TemplateView):
+    template_name = 'cms/confidentiality.html'
