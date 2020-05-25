@@ -5,8 +5,9 @@
     <div class="container">
         <div class="intro">
             <h2 class="text-center">Видео</h2>
-            <p class="text-center">Nunc luctus in metus eget fringilla. Aliquam sed justo ligula. Vestibulum nibh erat,
-                pellentesque ut laoreet vitae. </p>
+            {% if not user.available_video.all %}
+                <p class="text-center">У вас пока нет доступных к просмотру видео</p>
+            {% endif %}
         </div>
         <div class="row projects">
             {% for video in user.available_video.all %}
