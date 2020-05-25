@@ -104,10 +104,18 @@ class OrderCreate(CreateView):
             else:
                 send_email.delay(template, user.email, context=context)
                 result = 'Order created'
-            order = Order.objects.get(order_id=order_id)
-            order.is_paid = True
+
+            order = Order()
             order.username = User.objects.get(username=username)
+            order.order_id = order_id
+            order.amount = amount
+            order.is_paid = True
             order.save()
+
+            # order = Order.objects.get(order_id=order_id)
+            # order.is_paid = True
+            # order.username = User.objects.get(username=username)
+            # order.save()
             logger.debug('User {} with email {} created successful'.format(user.username, user.email))
         else:
             result = 'Error'
