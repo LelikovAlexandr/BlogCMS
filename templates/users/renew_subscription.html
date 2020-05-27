@@ -2,6 +2,41 @@
 {% load static %}
 {% block title %}Продлить подписку{% endblock %}
 {% block content %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function getPhoto(username) {
+
+            const regex = new RegExp(/^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/);
+            const validation = regex.test(username);
+            $("#btnGroup, #photoReturn, #message, #itsYourProfile").attr({hidden: true})
+            if (validation) {
+
+                $.get("https://www.instagram.com/" + username + "/?__a=1")
+                    .done(function (data) {
+                        const photoURL = data["graphql"]["user"]["profile_pic_url_hd"];
+
+                        $("#photoReturn").attr({src: photoURL, width: 150, height: 150, hidden: false})
+                        $("#btnGroup, #itsYourProfile").attr({hidden: false})
+                        $("#nextBtn, #usernameInput").attr({hidden: true})
+                        $("#username").text(username)
+                    })
+                    .fail(function () {
+                        $("#message").text('Такого пользователя в Instagram не существует. Пожалуйста, проверьте имя пользователя').attr({hidden: false})
+                    })
+
+            } else {
+                $("#message").text('Некорректные символы в имени пользователя. Возможно вы использовали русский алфавит').attr({hidden: false})
+            }
+
+        }
+
+        function clearContent() {
+            $("#btnGroup, #photoReturn, #itsYourProfile").attr({hidden: true})
+            $("#username").text("")
+            $("#usernameInput, #nextBtn").attr({hidden: false})
+            $("#message").attr({hidden: false}).text('Пожалуйста, внимательно проверьте имя пользователя')
+        }
+    </script>
     <div class="card shadow-lg o-hidden border-0 my-5">
         <div class="card-body p-0">
             <div class="row justify-content-center">
@@ -19,23 +54,41 @@
                         <form class="user" method="post" action="{% url 'GeneratePayment' %}">
                             <div class="form-group">
                                 <input type="text" class="form-control form-control-user"
-                                       placeholder="Введите ваш Instagram" name="username"
-                                       value="{{ user.username }}"/>
+                                       placeholder="Введите ваш Instagram" name="username" id="usernameInput"
+                                       value="{{ user.username }}" required/>
                                 <input type="email"
                                        class="form-control form-control-user mt-2"
-                                       id="exampleInputEmail-1"
-                                       aria-describedby="emailHelp"
                                        placeholder="Введите Email"
                                        name="email"
-                                       value="{{ user.email }}"/>
+                                       value="{{ user.email }}" required/>
                             </div>
                             <select class="custom-select mt-0" name="amount">
                                 <option value="350.00">1 месяц, 350₽</option>
                                 <option value="1800.00" selected>6 месяцев, 1800₽</option>
                             </select>
+                            <div class="alert alert-danger mt-2 mb-0" id="message" hidden></div>
                             <button
-                                    class="btn btn-primary btn-block text-white btn-user mt-4" type="submit">Оплатить
+                                    class="btn btn-primary btn-block text-white btn-user mt-2 col-12"
+                                    type="button"
+                                    id="nextBtn"
+                                    onclick="getPhoto($('#usernameInput').val().split(' ').join('').replace('@',''))">
+                                Далее
                             </button>
+                            <div class="mt-4 d-flex flex-column align-items-center">
+                                <h3 id="itsYourProfile" hidden>Это ваш профиль в Instagram?</h3>
+                                <img id="photoReturn" class="rounded" src="" hidden>
+                                <h5 class="mt-2 mb-0" id="username"></h5>
+                            </div>
+                            <div role="group" class="btn-group col-12 p-0" id="btnGroup" hidden>
+                                <button
+                                        class="btn btn-primary btn-block text-white btn-user mt-4 col-6" type="submit">
+                                    Да, оплатить
+                                </button>
+                                <button
+                                        class="btn btn-danger btn-block text-white btn-user mt-4 col-6" type="button"
+                                        onclick="clearContent()">Нет, это не я
+                                </button>
+                            </div>
                         </form>
                         <div class="text-center"></div>
                         <div class="text-center"></div>

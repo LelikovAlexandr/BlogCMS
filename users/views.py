@@ -21,6 +21,7 @@ from outer_modules.modulbank import get_signature
 from time import time
 import requests
 import os
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -40,9 +41,23 @@ def generate_payment(request):
         'description': 'Оплата доступа в блог',
         'success_url': os.getenv('MODULBANK_SUCCESS_URL'),
         'testing': os.getenv('MODULBANK_TEST', 0),
-        'unix_timestamp': int(time())
+        'unix_timestamp': int(time()),
+        'receipt_items': json.dumps({
+            'name': 'Оплата доступа в блог',
+            'quantity': 1,
+            'price': amount,
+            'sno': 'usn_income',
+            'payment_object': 'commodity',
+            'payment_method': 'full_prepayment',
+            'vat': 'none'
+        })
     }
-    signature = {'signature': get_signature(os.getenv('MODULBANK_SECRET_KEY_NEW'), body)}
+    signature = {
+        'signature': get_signature(
+            os.getenv('MODULBANK_TEST_SECRET_KEY')
+            if body.get('testing') else
+            os.getenv('MODULBANK_SECRET_KEY'), body)
+    }
     body.update(signature)
     Order.objects.create(order_id=order_id, amount=int(float(amount)), is_paid=False)
     return HttpResponse(requests.post(os.getenv('MODULBANK_PAY_GATEWAY'), data=body))
