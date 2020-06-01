@@ -4,7 +4,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordResetView, \
     PasswordResetConfirmView, PasswordResetDoneView, PasswordResetCompleteView
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
@@ -60,8 +60,9 @@ def generate_payment(request):
     }
     body.update(signature)
     Order.objects.create(order_id=order_id, amount=int(float(amount)), is_paid=False)
-    return HttpResponse(requests.post(os.getenv('MODULBANK_PAY_GATEWAY'), data=body))
-
+    session = requests.Session()
+    session.headers.update({'referer': os.getenv('MODULBANK_REFERER')})
+    return HttpResponse(session.post(os.getenv('MODULBANK_PAY_GATEWAY'), data=body))
 
 @require_POST
 @staff_member_required
