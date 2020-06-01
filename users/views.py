@@ -19,7 +19,6 @@ from orders.models import Order
 from django.db.models import Max
 from outer_modules.modulbank import get_signature
 from time import time
-import requests
 import os
 import json
 
@@ -60,9 +59,8 @@ def generate_payment(request):
     }
     body.update(signature)
     Order.objects.create(order_id=order_id, amount=int(float(amount)), is_paid=False)
-    session = requests.Session()
-    session.headers.update({'referer': os.getenv('MODULBANK_REFERER')})
-    return HttpResponse(session.post(os.getenv('MODULBANK_PAY_GATEWAY'), data=body))
+    return render(request, 'users/generate_payment.html', body)
+
 
 @require_POST
 @staff_member_required

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment</title>
+</head>
+<body>
+<form method="post" action="https://pay.modulbank.ru/pay" id="modulBankForm">
+    <input type="hidden" value="{{ merchant }}" name="merchant">
+    <input type="hidden" value="{{ amount }}" name="amount">
+    <input type="hidden" value="{{ order_id }}" name="order_id">
+    <input type="hidden" value="{{ client_name }}" name="client_name">
+    <input type="hidden" value="{{ client_email }}" name="client_email">
+    <input type="hidden" value="{{ description }}" name="description">
+    <input type="hidden" value="{{ success_url }}" name="success_url">
+    <input type="hidden" value="{{ testing }}" name="testing">
+    <input type="hidden" value="{{ unix_timestamp }}" name="unix_timestamp">
+    <input type="hidden" value="{{ receipt_items }}" name="receipt_items">
+    <input type="hidden" value="{{ signature }}" name="signature">
+</form>
+</body>
+<script type="text/javascript">
+
+function formAutoSubmit () {
+
+let form = document.getElementById("modulBankForm");
+
+form.submit();
+
+}
+
+window.onload = formAutoSubmit;
+
+</script>
+</html>
