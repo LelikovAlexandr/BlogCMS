@@ -97,7 +97,9 @@ class OrderCreate(CreateView):
             user.save()
 
             formatted_date = dateformat.format(user.subscribe_until, settings.DATE_FORMAT)
-            context = {'subscribe_until': formatted_date}
+            context = {'subscribe_until': formatted_date,
+                       'init_password': user.init_password,
+                       'username': user.username}
             if settings.DEBUG:
                 result = 'Sent email to {}\n with template {}\n and context: {}'.format(
                     user.email, template, context)
