@@ -40,7 +40,7 @@ def generate_payment(request):
         'client_email': email,
         'description': 'Оплата доступа в блог',
         'success_url': os.getenv('MODULBANK_SUCCESS_URL'),
-        'testing': os.getenv('MODULBANK_TEST', 0),
+        'testing': int(os.getenv('MODULBANK_TEST', 0)),
         'unix_timestamp': int(time()),
         'receipt_items': json.dumps({
             'name': 'Оплата доступа в блог',
@@ -55,7 +55,7 @@ def generate_payment(request):
     signature = {
         'signature': get_signature(
             os.getenv('MODULBANK_TEST_SECRET_KEY')
-            if body.get('testing') else
+            if int(body.get('testing')) else
             os.getenv('MODULBANK_SECRET_KEY'), body)
     }
     body.update(signature)
