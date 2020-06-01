@@ -27,6 +27,9 @@ class Video(models.Model):
     tags = models.ManyToManyField(Tag, blank=True)
     slug = models.SlugField(max_length=50, default='', null=True, blank=True)
 
+    class Meta:
+        ordering = ["publish_date"]
+
     def save(self, *args, **kwargs):
         self.slug = slugify(self.caption)
         super().save(*args, **kwargs)

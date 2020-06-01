@@ -18,6 +18,7 @@ from orders.models import Order
 from outer_modules.modulbank import get_signature
 from users.models import User, UserStatus
 import logging
+from django.utils.crypto import get_random_string
 
 logger = logging.getLogger(__name__)
 
@@ -91,7 +92,10 @@ class OrderCreate(CreateView):
 
             number_of_months = Price.objects.get(price=amount).number_of_months
             user, create = User.objects.update_or_create(username=username)
-            user.email = data.get('client_email')
+            if create:
+                user.init_password = get_random_string(8)
+                user.email = data.get('client_email')
+                user.set_password(user.init_password)
             start_new_period, template = calculate_new_period(create, user)
             user.subscribe_until = start_new_period + relativedelta(months=number_of_months)
             user.save()
@@ -107,17 +111,13 @@ class OrderCreate(CreateView):
                 send_email.delay(template, user.email, context=context)
                 result = 'Order created'
 
-            order = Order()
+            order = Order.objects.get(order_id=order_id)
             order.username = User.objects.get(username=username)
             order.order_id = order_id
             order.amount = amount
             order.is_paid = True
             order.save()
 
-            # order = Order.objects.get(order_id=order_id)
-            # order.is_paid = True
-            # order.username = User.objects.get(username=username)
-            # order.save()
             logger.debug('User {} with email {} created successful'.format(user.username, user.email))
         else:
             result = 'Error'

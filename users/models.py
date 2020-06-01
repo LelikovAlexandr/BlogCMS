@@ -2,7 +2,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from pytils.translit import slugify
 from videos.models import Video
-from django.utils.crypto import get_random_string
 
 
 class UserStatus(models.Model):
@@ -22,14 +21,10 @@ class User(AbstractUser):
     status = models.ForeignKey(UserStatus, on_delete=models.CASCADE,
                                related_name='status', default=1)
     available_video = models.ManyToManyField(Video)
-    init_password = models.CharField(max_length=10, default=get_random_string(8))
+    init_password = models.CharField(max_length=10, default='')
 
     class Meta:
         ordering = ["subscribe_until"]
-
-    def save(self, *args, **kwargs):
-        self.set_password(self.init_password)
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.username
