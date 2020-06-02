@@ -42,13 +42,17 @@
                                     {% csrf_token %}
                                     <div class="form-group"><input class="form-control form-control-user" type="text"
                                                                    id="exampleInputEmail"
-                                                                   placeholder="Instagram" name="username" required autofocus></div>
+                                                                   placeholder="Instagram" name="username" required
+                                                                   autofocus onkeyup="let start = this.selectionStart;
+                                                                                      let end = this.selectionEnd;
+                                                                                      this.value = this.value.toLowerCase();
+                                                                                      this.setSelectionRange(start, end);"></div>
                                     <div class="form-group"><input class="form-control form-control-user"
                                                                    type="password" id="exampleInputPassword"
                                                                    placeholder="Пароль" name="password" required></div>
                                     {% if form.non_field_errors %}
                                         {% for error in form.non_field_errors %}
-                                        <div class="text-danger mb-3">{{ error }}</div>
+                                            <div class="text-danger mb-3">{{ error }}</div>
                                         {% endfor %}
                                     {% endif %}
                                     <button class="btn btn-primary btn-block text-white btn-user" type="submit">Войти
@@ -57,7 +61,8 @@
                                        href="{% url 'RenewSubscription' %}">Оплатить доступ</a>
                                     <hr>
                                 </form>
-                                <div class="text-center"><a class="small" href="{% url 'PasswordReset' %}">Забыли пароль?</a>
+                                <div class="text-center"><a class="small" href="{% url 'PasswordReset' %}">Забыли
+                                    пароль?</a>
                                 </div>
                             </div>
                         </div>
