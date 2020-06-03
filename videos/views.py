@@ -1,11 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
+
 from users.models import User
 from videos.models import Tag, Video
-from django.contrib.messages.views import SuccessMessageMixin
 
 
 class CreateVideo(SuccessMessageMixin, LoginRequiredMixin, CreateView):

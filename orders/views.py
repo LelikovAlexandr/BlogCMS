@@ -1,3 +1,4 @@
+import logging
 import os
 from operator import attrgetter
 
@@ -8,6 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils import dateformat, timezone
+from django.utils.crypto import get_random_string
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, DeleteView
 from dotenv import load_dotenv
@@ -17,8 +19,6 @@ from cms.tasks import send_email
 from orders.models import Order
 from outer_modules.modulbank import get_signature
 from users.models import User, UserStatus
-import logging
-from django.utils.crypto import get_random_string
 
 logger = logging.getLogger(__name__)
 
@@ -88,7 +88,7 @@ class OrderCreate(CreateView):
         amount = int(float(data.get('amount')))
         order_id = data.get('order_id')
 
-        if is_signature_ok(data) and is_uniq_order(order_id, amount, username):
+        if is_signature_ok(data) and is_uniq_order(order_id, amount, username): #Добавить проверку на наличие параметра в запросе от админа
 
             number_of_months = Price.objects.get(price=amount).number_of_months
             user, create = User.objects.update_or_create(username=username)

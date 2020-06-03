@@ -31,6 +31,7 @@ publish: build
 	poetry publish -r $(REPO) -u $(USER) -p $(PASSWORD)
 
 db:
+	isort -y
 	docker build -t ${IMG} .
 	docker tag ${IMG} ${LATEST}
 

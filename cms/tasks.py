@@ -1,11 +1,11 @@
 import datetime
+import logging
 from time import sleep
 
 from celery import shared_task
 
 from cms.models import EmailTemplate
 from users.models import User
-import logging
 
 logger = logging.getLogger(__name__)
 DAYS_TO_UNSUBSCRIBE = 3

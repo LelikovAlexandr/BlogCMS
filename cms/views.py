@@ -7,14 +7,13 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.decorators.http import require_GET
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from django.views.generic import TemplateView
+
 from cms.models import Price
 from orders.models import Order
 from outer_modules.instagram import get_followers
 from users.models import User, UserStatus
-
 
 # from django.db.models import Count
 

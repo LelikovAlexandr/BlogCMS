@@ -1,26 +1,31 @@
+import json
+import logging
+import os
 from operator import attrgetter
+from time import time
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordResetView, \
-    PasswordResetConfirmView, PasswordResetDoneView, PasswordResetCompleteView
-from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
+from django.contrib.auth.views import (LoginView, LogoutView,
+                                       PasswordChangeView,
+                                       PasswordResetCompleteView,
+                                       PasswordResetConfirmView,
+                                       PasswordResetDoneView,
+                                       PasswordResetView)
+from django.db.models import Max
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
 from django.views.generic.edit import DeleteView, UpdateView
-from django.views.decorators.csrf import csrf_exempt
+
+from orders.models import Order
+from outer_modules.modulbank import get_signature
 from users.forms import UserEditForm
 from users.models import User, UserStatus
-from django.utils.decorators import method_decorator
-from django.shortcuts import render
-import logging
-from orders.models import Order
-from django.db.models import Max
-from outer_modules.modulbank import get_signature
-from time import time
-import os
-import json
 
 logger = logging.getLogger(__name__)
 

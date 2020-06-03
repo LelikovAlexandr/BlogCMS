@@ -1,6 +1,18 @@
 {% extends 'main.html' %}
 {% block title %}Добавить видео{% endblock %}
 {% block content %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function getYTCode(url) {
+            const urlParams = new URLSearchParams(url.split('?')[1]);
+            const code = urlParams.get('v');
+            $("#YTFrame").attr({
+                src: `https://www.youtube.com/embed/${code}?iv_load_policy=3&modestbranding=1`,
+                hidden: false
+            })
+            $("#YTCode").attr({value: code})
+        }
+    </script>
     <div class="container-fluid">
         <div class="card shadow-lg o-hidden border-0 my-5">
             <div class="card-body p-0">
@@ -24,7 +36,8 @@
                                         </dl>
                                     {% endif %}
                                     <input type="text" class="form-control form-control-user mb-2"
-                                           placeholder="Код видео" name="video_code" required/>
+                                           placeholder="Ссылка на видео в YouTube" required
+                                           onchange="getYTCode(this.value)"/>
                                     {% if form.video_code.errors %}
                                         <dl>
                                             {% for error in form.video_code.errors %}
@@ -34,6 +47,10 @@
                                             {% endfor %}
                                         </dl>
                                     {% endif %}
+                                    <input type="hidden" id="YTCode" name="video_code">
+                                    <div class="d-flex justify-content-center mb-2">
+                                        <iframe id="YTFrame" src="" width="400" height="225" hidden></iframe>
+                                    </div>
                                     <input type="text" class="form-control form-control-user mb-2"
                                            placeholder="Дата публикации" name="publish_date"
                                            value="{% now 'd.m.Y' %}" required/>
