@@ -1,0 +1,7 @@
+{% extends 'main.html' %}
+{% block title %}Список категорий{% endblock %}
+{% block content %}
+{% for category in filecategory_list%}
+<p>{{ category.name }}</p>
+{% endfor %}
+{% endblock %}

@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from pytils.translit import slugify
 
+from files.models import File
 from videos.models import Video
 
 
@@ -22,6 +23,7 @@ class User(AbstractUser):
     status = models.ForeignKey(UserStatus, on_delete=models.CASCADE,
                                related_name='status', default=1)
     available_video = models.ManyToManyField(Video)
+    available_file = models.ManyToManyField(File)
     init_password = models.CharField(max_length=10, default='')
 
     class Meta:

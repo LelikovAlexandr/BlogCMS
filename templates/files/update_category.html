@@ -1,0 +1,8 @@
+{% extends 'main.html' %}
+{% block title %}Изменить категорию{% endblock %}
+{% block content %}
+<form method="post">
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+</form>
+{% endblock %}

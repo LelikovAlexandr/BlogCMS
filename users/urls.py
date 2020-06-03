@@ -5,6 +5,7 @@ from users import views
 
 urlpatterns = [
     url(r'^account/$', views.UserAccount.as_view(), name='UserAccount'),
+    url(r'^files/(?P<category>[\w-]+)$', views.UserFiles.as_view(), name='UserFiles'),
     url(r'^login/$', views.LoginUser.as_view(), name='LoginUser'),
     url(r'^logout/$', views.LogoutUser.as_view(), name='LogoutUser'),
     url(r'change_password/', views.ChangeUserPassword.as_view(), name='ChangeUserPassword'),

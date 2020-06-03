@@ -19,9 +19,10 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from django.views.generic import TemplateView
+from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import DeleteView, UpdateView
 
+from files.models import FileCategory
 from orders.models import Order
 from outer_modules.modulbank import get_signature
 from users.forms import UserEditForm
@@ -95,6 +96,21 @@ class UserList(LoginRequiredMixin, TemplateView):
 
 class UserAccount(LoginRequiredMixin, TemplateView):
     template_name = 'users/user_account.html'
+
+
+class UserFiles(LoginRequiredMixin, ListView):
+    template_name = 'users/files.html'
+    context_object_name = 'files'
+
+    def get_queryset(self):
+        category = self.kwargs['category']
+        return User.objects.get(username=self.request.user).available_file.filter(
+            category__slug=category)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['caption'] = FileCategory.objects.get(slug=self.kwargs['category']).name
+        return context
 
 
 class LoginUser(LoginView):

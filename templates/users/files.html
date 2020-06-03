@@ -1,0 +1,30 @@
+{% extends 'users/main.html' %}
+{% load static %}
+{% block title %}{{ caption }}{% endblock %}
+{% block content %}
+    <div class="container d-flex flex-column align-items-center">
+        <div class="intro">
+            <h2 class="text-center">{{ caption }}</h2>
+            {% if not files %}
+                <p class="text-center">У вас пока нет доступных файлов</p>
+            {% endif %}
+        </div>
+        {% if files %}
+        <div class="card shadow col-8">
+            <div class="card-body">
+                    <table class="table table-sm table-borderless  my-0">
+                        <tbody>
+                        {% for file in files %}
+                            <tr>
+                                <td class="align-middle">
+                                    <p class="name"><a href="{% url 'Download' slug=file.slug %}">{{ file.name }}</a></p>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}
