@@ -6,7 +6,7 @@ django-bootstrap4
 requests==2.21.0
 git+https://github.com/Lelikov/instagram-scraper.git
 django-fa
-celery~=4.4.2
+celery==4.4.2
 redis
 django-celery-beat
 django-anymail
