@@ -20,15 +20,15 @@ class Tag(models.Model):
 
 
 class Video(models.Model):
-    caption = models.CharField(max_length=50, unique=True)
+    caption = models.CharField(max_length=150, unique=True)
     description = models.TextField(blank=True)
     video_code = models.CharField(max_length=20)
     publish_date = models.DateField(default=timezone.now)
     tags = models.ManyToManyField(Tag, blank=True)
-    slug = models.SlugField(max_length=50, default='', null=True, blank=True)
+    slug = models.SlugField(max_length=150, default='', null=True, blank=True)
 
     class Meta:
-        ordering = ["publish_date"]
+        ordering = ["-publish_date"]
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.caption)

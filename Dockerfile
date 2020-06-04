@@ -1,7 +1,12 @@
-FROM python:3.8.3
+FROM python:3.8.3-slim
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV APP_HOME=/usr/src/propitanie
+
+RUN apt-get update \
+&& apt-get install gcc -y \
+&& apt-get install git -y \
+&& apt-get clean
 
 RUN mkdir $APP_HOME
 RUN mkdir $APP_HOME/staticfiles

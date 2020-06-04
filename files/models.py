@@ -19,7 +19,7 @@ class FileCategory(models.Model):
 
 class File(models.Model):
     name = models.CharField(max_length=150)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     file = models.FileField(upload_to='files/')
     category = models.ForeignKey(FileCategory, on_delete=models.SET_NULL, blank=True, null=True)
     slug = models.SlugField(max_length=150, default='', null=True, blank=True)

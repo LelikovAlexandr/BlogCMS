@@ -22,7 +22,7 @@
 {% endfor %}
     <input class="form-control mb-1 mt-2 col-12" placeholder="Username" name="client_name">
     <input class="form-control mb-1 col-12" placeholder="Email" name="client_email">
-    <input class="form-control mb-1 col-12" placeholder="Order ID" name="order_id">
+    <input type="hidden" name="is_admin" value="True">
     {% for price in all_price %}
     <div class="form-check">
         <input class="form-check-input" type="radio" name="amount" id="{{ price.number_of_months }}_month" value="{{ price.price }}.00" checked>

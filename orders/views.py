@@ -6,6 +6,7 @@ from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Max
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils import dateformat, timezone
@@ -110,11 +111,11 @@ class OrderCreate(CreateView):
             else:
                 send_email.delay(template, user.email, context=context)
                 result = 'Order created'
-
+            if data.get('is_admin'):
+                order_id = int(Order.objects.aggregate(Max('order_id')).get('order_id__max')) + 1
+                Order.objects.create(order_id=order_id, amount=amount, is_paid=True)
             order = Order.objects.get(order_id=order_id)
             order.username = User.objects.get(username=username)
-            order.order_id = order_id
-            order.amount = amount
             order.is_paid = True
             order.save()
 
