@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^price/$', views.PriceList.as_view(), name='PriceList'),
     url(r'^price/create/$', views.PriceCreate.as_view(), name='PriceCreate'),
     url(r'^price/(?P<pk>\d+)/edit/$', views.PriceUpdate.as_view(), name='PriceUpdate'),
+    url(r'^price/(?P<pk>\d+)/delete/$', views.PriceDelete.as_view(), name='PriceDelete'),
     url(r'^payments_rules/$', views.PaymentsRules.as_view(), name='PaymentsRules'),
     url(r'^confidentiality/$', views.Confidentiality.as_view(), name='Confidentiality'),
 ]

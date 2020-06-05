@@ -7,6 +7,7 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils import dateformat, timezone
@@ -89,7 +90,7 @@ class OrderCreate(CreateView):
         amount = int(float(data.get('amount')))
         order_id = data.get('order_id')
 
-        if is_signature_ok(data) and is_uniq_order(order_id, amount, username): #Добавить проверку на наличие параметра в запросе от админа
+        if is_signature_ok(data) and is_uniq_order(order_id, amount, username):
 
             number_of_months = Price.objects.get(price=amount).number_of_months
             user, create = User.objects.update_or_create(username=username)
@@ -113,13 +114,18 @@ class OrderCreate(CreateView):
                 result = 'Order created'
             if data.get('is_admin'):
                 order_id = int(Order.objects.aggregate(Max('order_id')).get('order_id__max')) + 1
-                Order.objects.create(order_id=order_id, amount=amount, is_paid=True)
+                Order.objects.create(order_id=order_id, amount=amount, is_paid=False)
             order = Order.objects.get(order_id=order_id)
             order.username = User.objects.get(username=username)
-            order.is_paid = True
+            if not data.get('is_free_user'):
+                order.is_paid = True
             order.save()
 
             logger.debug('User {} with email {} created successful'.format(user.username, user.email))
         else:
             result = 'Error'
-        return render(request, 'orders/create_order.html', context={'result': result})
+
+        if data.get('is_admin'):
+            return render(request, 'orders/create_order.html', context={'result': result})
+        else:
+            return HttpResponse('OK', status=200)

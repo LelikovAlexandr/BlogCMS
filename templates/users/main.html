@@ -58,9 +58,13 @@
                         <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown"
                                                          aria-expanded="false" href="#">Профиль</a>
                             <div class="dropdown-menu" role="menu"><h6 class="dropdown-header"
-                                                                       role="presentation">{{ user.username }}</h6><a
-                                    class="dropdown-item" role="presentation" href="{% url 'ChangeUserPassword' %}">Изменить
-                                пароль</a><a class="dropdown-item" role="presentation" href="{% url 'LogoutUser' %}">Выйти</a>
+                                                                       role="presentation">{{ user.username }}</h6>
+                                {% if user.is_staff %}
+                                    <a class="dropdown-item" role="presentation" href="{% url 'Dashboard' %}">Админка</a>
+                                {% endif %}
+                                <a class="dropdown-item" role="presentation" href="{% url 'ChangeUserPassword' %}">Изменить
+                                    пароль</a>
+                                <a class="dropdown-item" role="presentation" href="{% url 'LogoutUser' %}">Выйти</a>
                             </div>
                         </li>
                     </ul>

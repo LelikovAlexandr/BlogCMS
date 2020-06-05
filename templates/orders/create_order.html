@@ -1,37 +1,54 @@
 {% extends 'main.html' %}
 {% block title %}Новый заказ{% endblock %}
 {% block content %}
-{% if result == 'Error' %}
-    <div class="alert alert-danger" role="alert">
-        {{ result }}
-    </div>
-{% elif result %}
-    <div class="alert alert-info" role="alert">
-        {{ result }}
-    </div>
-{% endif %}
-<form method="post">
-    {{ form.non_field_errors }}
-    {% for field in form %}
-    {% if field.errors %}
-        <div class="alert alert-info" role="alert">
-             {{ field.name }}
-             {{ field.errors }}
+    <div class="container-fluid">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-12 col-lg-6">
+                <div class="card shadow-lg o-hidden border-0">
+                <div class="card-header"><p class="text-primary m-0 font-weight-bold">Новый заказ</p></div>
+                    <div class="card-body">
+                            {% if result == 'Error' %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ result }}
+                                </div>
+                            {% elif result %}
+                                <div class="alert alert-info" role="alert">
+                                    {{ result }}
+                                </div>
+                            {% endif %}
+                            <div class="form-group">
+                            <form method="post">
+                                {{ form.non_field_errors }}
+                                {% for field in form %}
+                                    {% if field.errors %}
+                                        <div class="alert alert-info" role="alert">
+                                            {{ field.name }}
+                                            {{ field.errors }}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                                <input class="form-control mb-1 mt-2 col-12" placeholder="Username" name="client_name">
+                                <input class="form-control mb-1 col-12" placeholder="Email" name="client_email">
+                                <input type="hidden" name="is_admin" value="True">
+                                <input type="checkbox" id="is_free_user" name="is_free_user">
+                                <label for="is_free_user">Бесплатный пользователь</label>
+                                {% for price in all_price %}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="amount"
+                                               id="{{ price.number_of_months }}_month" value="{{ price.price }}.00"
+                                               checked>
+                                        <label class="form-check-label" for="{{ price.number_of_months }}_month">
+                                            {{ price.number_of_months }} месяц, {{ price.price }}₽
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                                <input class="form-control mb-1 col-12" placeholder="Signature" name="signature">
+                                <button class="btn btn-success" type="submit">Submit</button>
+                            </form>
+                            </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    {% endif %}
-{% endfor %}
-    <input class="form-control mb-1 mt-2 col-12" placeholder="Username" name="client_name">
-    <input class="form-control mb-1 col-12" placeholder="Email" name="client_email">
-    <input type="hidden" name="is_admin" value="True">
-    {% for price in all_price %}
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="amount" id="{{ price.number_of_months }}_month" value="{{ price.price }}.00" checked>
-        <label class="form-check-label" for="{{ price.number_of_months }}_month">
-            {{ price.number_of_months }} месяц, {{ price.price }}₽
-        </label>
     </div>
-   {% endfor %}
-    <input class="form-control mb-1 col-12" placeholder="Signature" name="signature">
-    <button class="btn btn-success" type="submit">Submit</button>
-</form>
 {% endblock %}

@@ -15,6 +15,7 @@ from orders.models import Order
 from outer_modules.instagram import get_followers
 from users.models import User, UserStatus
 
+
 # from django.db.models import Count
 
 # User.objects.filter(subscribe_until__gte=timezone.now().date()).values('subscribe_until').annotate(
@@ -31,7 +32,8 @@ def dashboard(request):
     nearest_unsubscribe_date = User.objects.filter(
         subscribe_until__gt=timezone.datetime.now().date()).aggregate(Min('subscribe_until')).get(
         'subscribe_until__min')
-    today_revenue = Order.objects.filter(created_datetime__date=timezone.now().date(), is_paid=True)
+    today_revenue = Order.objects.filter(created_datetime__date=timezone.now().date(),
+                                         is_paid=True)
     context = {
         'today_users': sorted(today_users, key=attrgetter('status.id', 'username')),
         'number_of_paid_users': number_of_users,
@@ -99,7 +101,7 @@ class PriceUpdate(LoginRequiredMixin, UpdateView):
     template_name = 'cms/update_price.html'
 
 
-class DeleteVideo(LoginRequiredMixin, DeleteView):
+class PriceDelete(LoginRequiredMixin, DeleteView):
     model = Price
     success_url = reverse_lazy('PriceList')
 

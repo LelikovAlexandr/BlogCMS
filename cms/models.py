@@ -6,8 +6,11 @@ from django.template import Context
 
 
 class Price(models.Model):
-    number_of_months = models.IntegerField()
+    number_of_months = models.IntegerField(unique=True)
     price = models.IntegerField()
+
+    class Meta:
+        ordering = ["number_of_months"]
 
     def __str__(self):
         return str(self.number_of_months)
