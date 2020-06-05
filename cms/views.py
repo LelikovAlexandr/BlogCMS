@@ -1,5 +1,6 @@
 from operator import attrgetter
 
+from dateutil.relativedelta import relativedelta
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Min, Q, Sum
@@ -14,12 +15,10 @@ from cms.models import Price
 from orders.models import Order
 from outer_modules.instagram import get_followers
 from users.models import User, UserStatus
+import json
 
-
-# from django.db.models import Count
-
-# User.objects.filter(subscribe_until__gte=timezone.now().date()).values('subscribe_until').annotate(
-#     total=Count('subscribe_until'))
+from django.db.models import Count
+from django.core.serializers import serialize
 
 
 @require_GET
@@ -112,3 +111,18 @@ class PaymentsRules(TemplateView):
 
 class Confidentiality(TemplateView):
     template_name = 'cms/confidentiality.html'
+
+
+@staff_member_required
+def unsubscribe_chart(request):
+    chart_data = User.objects.filter(subscribe_until__gte=timezone.now().date(),
+                                     subscribe_until__lte=timezone.now().date() + relativedelta(
+                                         months=1)).values(
+        'subscribe_until').annotate(total=Count('subscribe_until'))
+    unsubscribers = []
+    days = []
+    for day in chart_data:
+        unsubscribers.append(int(day.get('total')))
+        days.append(float(day.get('subscribe_until').strftime('%d.%m')))
+    return render(request, 'cms/unsubscribe_chart.html',
+                  {'unsubscribers': unsubscribers, 'days': days})
