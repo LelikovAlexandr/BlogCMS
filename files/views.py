@@ -46,7 +46,7 @@ class UploadFile(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         self.object = form.save()
-        for user in User.objects.filter(subscribe_until__gte=timezone.now().date()):
+        for user in User.objects.all():
             User.objects.get(username=user.username).available_file.add(self.object)
         return super().form_valid(form)
 

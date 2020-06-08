@@ -1,9 +1,10 @@
+import json
 from operator import attrgetter
 
 from dateutil.relativedelta import relativedelta
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Min, Q, Sum
+from django.db.models import Count, Min, Q, Sum
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -15,10 +16,6 @@ from cms.models import Price
 from orders.models import Order
 from outer_modules.instagram import get_followers
 from users.models import User, UserStatus
-import json
-
-from django.db.models import Count
-from django.core.serializers import serialize
 
 
 @require_GET

@@ -106,8 +106,7 @@
                 <div class="card-body">
                     <div class="row align-items-center no-gutters">
                         <div class="col mr-2">
-                            <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><span
-                                    class="text-warning">Отпишется&nbsp;{{ nearest_unsubscribe_date|date:'j E' }}</span>
+                            <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><a class="text-warning" href="{% url 'UnsubscribeChart' %}">Отпишется&nbsp;{{ nearest_unsubscribe_date|date:'j E' }}</a>
                             </div>
                             <div class="text-dark font-weight-bold h5 mb-0">
                                 <span>{{ number_of_unsubscribing_users }}</span></div>
