@@ -21,6 +21,7 @@ from cms.tasks import send_email
 from orders.models import Order
 from outer_modules.modulbank import get_signature
 from users.models import User, UserStatus
+from files.models import File
 
 logger = logging.getLogger(__name__)
 
@@ -100,6 +101,7 @@ class OrderCreate(CreateView):
                 user.set_password(user.init_password)
             start_new_period, template = calculate_new_period(create, user)
             user.subscribe_until = start_new_period + relativedelta(months=number_of_months)
+            user.available_file.add(* File.objects.values_list('id', flat=True))
             user.save()
 
             formatted_date = dateformat.format(user.subscribe_until, settings.DATE_FORMAT)
