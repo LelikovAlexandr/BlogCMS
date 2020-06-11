@@ -18,10 +18,10 @@ from dotenv import load_dotenv
 
 from cms.models import Price
 from cms.tasks import send_email
+from files.models import File
 from orders.models import Order
 from outer_modules.modulbank import get_signature
 from users.models import User, UserStatus
-from files.models import File
 
 logger = logging.getLogger(__name__)
 
