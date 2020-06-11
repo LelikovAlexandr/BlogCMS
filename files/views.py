@@ -55,6 +55,11 @@ class FilesList(LoginRequiredMixin, ListView):
     model = File
     template_name = 'files/files_list.html'
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category_list'] = FileCategory.objects.all()
+        return context
+
 
 class UpdateFile(LoginRequiredMixin, UpdateView):
     model = File
@@ -72,7 +77,7 @@ class AddFileCategory(LoginRequiredMixin, CreateView):
     model = FileCategory
     fields = '__all__'
     template_name = 'files/create_category.html'
-    success_url = reverse_lazy('CategoryList')
+    success_url = reverse_lazy('FilesList')
 
 
 class FileCategoryList(LoginRequiredMixin, ListView):

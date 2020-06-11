@@ -41,14 +41,9 @@
                                             width="160"
                                             height="90"></iframe>
                                 </td>
-                                <td class="align-middle">{{ video.caption }}</td>
+                                <td class="align-middle"><a href="{% url 'UpdateVideo' slug=video.slug %}">{{ video.caption }}</a></td>
                                 <td class="align-middle">{{ video.publish_date }}</td>
                                 <td class="align-middle">
-                                    <form method="GET" action="{% url 'UpdateVideo' slug=video.slug %}">
-                                        <button type="submit" class="btn btn-sm btn-success">
-                                            <i class="fa fa-pencil" aria-hidden="true"></i>
-                                        </button>
-                                    </form>
                                     <form method="POST" action="{% url 'DeleteVideo' slug=video.slug %}">
                                         <button type="button" class="btn btn-sm btn-danger"
                                                 onClick="deleteFunction(this.form)">

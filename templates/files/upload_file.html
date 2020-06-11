@@ -1,74 +1,38 @@
-
-
 {% extends 'main.html' %}
 {% block title %}Добавить файл{% endblock %}
 {% block content %}
-    <form method="post" enctype="multipart/form-data">
-        {{ form.as_p }}
-        <button class="btn btn-success">Отправить</button>
-    </form>
-    {#    <div class="container-fluid">#}
-    {#        <div class="card shadow-lg o-hidden border-0 my-5">#}
-    {#            <div class="card-body p-0">#}
-    {#                <div class="row justify-content-center">#}
-    {#                    <div class="col-lg-6">#}
-    {#                        <div class="p-5">#}
-    {#                            <div class="text-center">#}
-    {#                                <h4 class="text-dark mb-2">Добавить файл</h4>#}
-    {#                            </div>#}
-    {#                            <form class="user" method="post" enctype="multipart/form-data">#}
-    {#                                <div class="form-group">#}
-    {#                                    <input type="text" class="form-control form-control-user mb-2"#}
-    {#                                           placeholder="Название" name="name" autofocus required/>#}
-    {#                                    {% if form.name.errors %}#}
-    {#                                        <dl>#}
-    {#                                            {% for error in form.name.errors %}#}
-    {#                                                <dd><small#}
-    {#                                                        class="form-text text-danger mb-1">{{ error }}</small>#}
-    {#                                                </dd>#}
-    {#                                            {% endfor %}#}
-    {#                                        </dl>#}
-    {#                                    {% endif %}#}
-    {#                                    <input type="text" class="form-control form-control-user mb-2"#}
-    {#                                           placeholder="Ссылка на видео в YouTube" required#}
-    {#                                           onchange="getYTCode(this.value)"/>#}
-    {#                                    {% if form.video_code.errors %}#}
-    {#                                        <dl>#}
-    {#                                            {% for error in form.video_code.errors %}#}
-    {#                                                <dd><small#}
-    {#                                                        class="form-text text-danger mb-1">{{ error }}</small>#}
-    {#                                                </dd>#}
-    {#                                            {% endfor %}#}
-    {#                                        </dl>#}
-    {#                                    {% endif %}#}
-    {#                                    <div class="d-flex justify-content-center mb-2">#}
-    {#                                        <iframe id="YTFrame" src="" width="400" height="225" hidden></iframe>#}
-    {#                                    </div>#}
-    {#                                    <input type="text" class="form-control form-control-user mb-2"#}
-    {#                                           placeholder="Дата публикации" name="publish_date"#}
-    {#                                           value="{% now 'd.m.Y' %}" required/>#}
-    {#                                    {% if form.publish_date.errors %}#}
-    {#                                        <dl>#}
-    {#                                            {% for error in form.publish_date.errors %}#}
-    {#                                                <dd><small#}
-    {#                                                        class="form-text text-danger mb-1">{{ error }}</small>#}
-    {#                                                </dd>#}
-    {#                                            {% endfor %}#}
-    {#                                        </dl>#}
-    {#                                    {% endif %}#}
-    {#                                    <textarea class="form-control" placeholder="Описание" name="description"#}
-    {#                                              required></textarea>#}
-    {#                                    <button class="btn btn-primary btn-block text-white btn-user mt-2" type="submit">#}
-    {#                                        Сохранить#}
-    {#                                    </button>#}
-    {#                                </div>#}
-    {#                            </form>#}
-    {#                            <div class="text-center"></div>#}
-    {#                            <div class="text-center"></div>#}
-    {#                        </div>#}
-    {#                    </div>#}
-    {#                </div>#}
-    {#            </div>#}
-    {#        </div>#}
-    {#    </div>#}
+    <div class="container-fluid">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-12 col-lg-6">
+                <div class="card shadow-lg o-hidden border-0">
+                    <div class="card-header"><p class="text-primary m-0 font-weight-bold">Добавить файл</p></div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <form method="post" enctype="multipart/form-data">
+                                {{ form.non_field_errors }}
+                                <label for="id_category" class="mb-0">Категория</label>
+                                <select class="custom-select mb-2" name="category">
+                                    {% for item in form.category %}
+                                    {{ item }}
+                                    {% endfor %}
+                                </select>
+                                {{ form.category.errors }}
+                                <input type="text" name="name" class="form-control mb-2" required placeholder="Название">
+                                {{ form.name.errors }}
+                                <textarea name="description" class="form-control mb-2" placeholder="Описание"></textarea>
+                                {{ form.description.errors }}
+                                <input type="file" class="mb-2" name="file" required>
+                                <div class="d-flex justify-content-between">
+                                    <button class="btn btn-success" type="submit">Сохранить</button>
+                                    <button class="btn btn-danger" type="button"
+                                            onclick="location.href='{% url 'FilesList' %}'">Отмена
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
