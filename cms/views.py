@@ -110,6 +110,14 @@ class Confidentiality(TemplateView):
     template_name = 'cms/confidentiality.html'
 
 
+class Offer(TemplateView):
+    template_name = 'cms/offer.html'
+
+
+class TermsOfUse(TemplateView):
+    template_name = 'cms/terms_of_use.html'
+
+
 @staff_member_required
 def unsubscribe_chart(request):
     chart_data = User.objects.filter(subscribe_until__gte=timezone.now().date(),

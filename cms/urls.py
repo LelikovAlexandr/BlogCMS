@@ -12,5 +12,7 @@ urlpatterns = [
     url(r'^price/(?P<pk>\d+)/delete/$', views.PriceDelete.as_view(), name='PriceDelete'),
     url(r'^payments_rules/$', views.PaymentsRules.as_view(), name='PaymentsRules'),
     url(r'^confidentiality/$', views.Confidentiality.as_view(), name='Confidentiality'),
+    url(r'^offer/$', views.Offer.as_view(), name='Offer'),
+    url(r'^terms/$', views.TermsOfUse.as_view(), name='TermsOfUse'),
     url(r'^chart/$', views.unsubscribe_chart, name='UnsubscribeChart'),
 ]
