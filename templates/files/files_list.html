@@ -67,6 +67,8 @@
                                     <th>
                                         <form method="post" action="{% url 'AddCategory' %}">
                                             <input type="text" name="name" required placeholder="Новая категория">
+                                            <input type="checkbox" name="available_to_active_subscribers" id="available_to_active_subscribers">
+                                            <label for="available_to_active_subscribers">Только активные</label>
                                             <button type="submit" class="btn btn-success">Добавить категорию</button>
                                         </form>
                                     </th>

@@ -5,6 +5,7 @@ from pytils.translit import slugify
 class FileCategory(models.Model):
     name = models.CharField(max_length=150)
     slug = models.SlugField(max_length=150, default='', null=True, blank=True)
+    available_to_active_subscribers = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["name"]

@@ -46,7 +46,11 @@ class UploadFile(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         self.object = form.save()
-        for user in User.objects.all():
+        if self.object.category.available_to_active_subscribers:
+            user_list = User.objects.filter(subscribe_until__gt=timezone.now().date())
+        else:
+            user_list = User.objects.all()
+        for user in user_list:
             User.objects.get(username=user.username).available_file.add(self.object)
         return super().form_valid(form)
 
@@ -89,9 +93,9 @@ class UpdateFileCategory(LoginRequiredMixin, UpdateView):
     model = FileCategory
     fields = '__all__'
     template_name = 'files/update_category.html'
-    success_url = reverse_lazy('CategoryList')
+    success_url = reverse_lazy('FilesList')
 
 
 class DeleteFileCategory(LoginRequiredMixin, DeleteView):
     model = FileCategory
-    success_url = reverse_lazy('CategoryList')
+    success_url = reverse_lazy('FilesList')
