@@ -14,8 +14,9 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from cms.models import Price
 from orders.models import Order
-from outer_modules.instagram import get_followers
 from users.models import User, UserStatus
+import csv
+from django.core.cache import cache
 
 
 @require_GET
@@ -58,10 +59,18 @@ def not_returned_user():
     return User.objects.filter(subscribe_until__lte=timezone.now().date())
 
 
-@require_GET
 @staff_member_required
 def get_difference(request):
-    set_of_followers = get_followers()
+    if request.method == 'POST':
+        file = request.FILES['file']
+        decoded_file = file.read().decode('utf-8').splitlines()
+        set_of_followers = set()
+        for i in csv.DictReader(decoded_file):
+            set_of_followers.add(i['username'])
+        cache.set('followers', set(set_of_followers), 300)
+    if cache.get('followers') is None:
+        return render(request, 'cms/upload_followers_file.html')
+    set_of_followers = cache.get('followers')
     set_of_users = set([user.username for user in User.objects.exclude(
         subscribe_until__lte=timezone.now().date())])
     paid_by_not_followers_set = sorted(

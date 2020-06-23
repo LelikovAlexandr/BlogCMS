@@ -22,7 +22,7 @@ def login():
     instagram.with_credentials(os.getenv('INSTAGRAM_LOGIN'),
                                os.getenv('INSTAGRAM_PASSWORD'),
                                os.path.join(BASE_DIR, 'cache', 'instagram/'))
-    instagram.login()
+    instagram.login(two_step_verificator=True)
 
     sleep(2)
     return instagram

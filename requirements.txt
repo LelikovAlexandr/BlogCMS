@@ -4,7 +4,7 @@ python-dotenv~=0.13.0
 python-dateutil~=2.8.1
 django-bootstrap4
 requests
-git+https://github.com/Lelikov/instagram-scraper.git
+git+https://github.com/realsirjoe/instagram-scraper.git
 django-fa
 celery==4.4.2
 redis
