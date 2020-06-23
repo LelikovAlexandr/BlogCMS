@@ -32,7 +32,7 @@
                                 <tbody>
                                 {% for user in followers_by_not_paid %}
                                     <tr>
-                                        <td><a href="{% url 'UserEdit' pk=user.pk %}">{{ user }}</a></td>
+                                        <td>{{ user }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
