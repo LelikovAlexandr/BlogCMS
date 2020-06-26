@@ -22,6 +22,7 @@ from django.views.decorators.http import require_POST
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import DeleteView, UpdateView
 
+from cms.models import Price
 from files.models import FileCategory
 from orders.models import Order
 from outer_modules.modulbank import get_signature
@@ -164,3 +165,4 @@ class DeleteUser(DeleteView, LoginRequiredMixin):
 
 class RenewSubscription(TemplateView):
     template_name = 'users/renew_subscription.html'
+    extra_context = {'prices': Price.objects.all()}

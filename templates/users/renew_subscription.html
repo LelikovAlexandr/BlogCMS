@@ -68,8 +68,18 @@
                                        value="{{ user.email }}" required/>
                             </div>
                             <select class="custom-select mt-0 mb-2" name="amount">
-                                <option value="350.00">1 месяц, 350₽</option>
-                                <option value="1800.00" selected>6 месяцев, 1800₽</option>
+                                {% for price in prices %}
+                                    <option value="{{ price.price }}.00">{{ price.number_of_months }}
+                                        {% if price.number_of_months == 1 %}
+                                        месяц,
+                                        {% elif price.number_of_months < 5 %}
+                                        месяца,
+                                        {% else %}
+                                        месяцев,
+                                        {% endif %}
+                                        {{ price.price }}₽
+                                    </option>
+                                {% endfor %}
                             </select>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="offer" required/>
