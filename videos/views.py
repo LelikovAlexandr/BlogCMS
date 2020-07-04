@@ -17,7 +17,8 @@ class CreateVideo(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         self.object = form.save()
-        for user in User.objects.filter(subscribe_until__gte=self.object.publish_date):
+        for user in User.objects.filter(subscribe_until__gte=self.object.publish_date,
+                                        date_joined__date__lte=self.object.publish_date):
             User.objects.get(username=user.username).available_video.add(self.object)
         return super().form_valid(form)
 
