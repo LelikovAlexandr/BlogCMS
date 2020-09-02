@@ -6,15 +6,15 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.db.models import Count, Min, Q, Sum
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.decorators.http import require_GET
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
-from cms.models import Price
 from cms.models import Article as ArticleModel
+from cms.models import Price
 from orders.models import Order
 from users.models import User, UserStatus
 

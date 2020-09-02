@@ -91,14 +91,14 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-sm-4 col-md-3 item">
+                    {% if legal %}
                     <h3>Юридическая информация</h3>
                     <ul>
-                        <li><a href="{% url 'PaymentsRules' %}">Оплата</a></li>
-                        <li><a href="{% url 'Confidentiality' %}">Конфиденциальность</a></li>
-                        <li><a href="{% url 'Offer' %}">Оферта</a></li>
-                        <li><a href="{% url 'TermsOfUse' %}">Пользовательское соглашение</a></li>
-                        <li><a href="/admin/article/recurrent">Оферта регулярных платежей</a></li>
+                    {% for document in legal %}
+                        <li><a href="{% url 'Article' slug=document.slug %}">{{ document.caption }}</a></li>
+                    {% endfor %}
                     </ul>
+                    {% endif %}
                 </div>
                 <div class="col-sm-4 col-md-3 item">
                 </div>

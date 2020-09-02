@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from cms.models import EmailTemplate, Price, Article
+from cms.models import Article, EmailTemplate, Price
 from orders.models import Order
 from users.models import User
 from videos.models import Video

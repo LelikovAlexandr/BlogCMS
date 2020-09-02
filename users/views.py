@@ -5,6 +5,7 @@ from operator import attrgetter
 from time import time
 
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import (LoginView, LogoutView,
                                        PasswordChangeView,
@@ -12,7 +13,6 @@ from django.contrib.auth.views import (LoginView, LogoutView,
                                        PasswordResetConfirmView,
                                        PasswordResetDoneView,
                                        PasswordResetView)
-from django.contrib.auth.decorators import login_required
 from django.db.models import Max
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
