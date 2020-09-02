@@ -12,6 +12,7 @@ from django.contrib.auth.views import (LoginView, LogoutView,
                                        PasswordResetConfirmView,
                                        PasswordResetDoneView,
                                        PasswordResetView)
+from django.contrib.auth.decorators import login_required
 from django.db.models import Max
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -79,6 +80,14 @@ def change_user_status(request):
         '{} have changed status for user {} from {} to {}'.format(request.user, user.username,
                                                                   user.status, status))
     user.status = UserStatus.objects.get(name=status)
+    user.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required()
+def recurrent_payments_cancel(request):
+    user = User.objects.get(username=request.user)
+    user.recurrrecurring_payments = False
     user.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 

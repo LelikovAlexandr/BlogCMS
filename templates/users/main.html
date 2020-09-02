@@ -21,6 +21,14 @@
     <link rel="manifest" href="{% static 'media/favicons/site.webmanifest' %}">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
+
+    <script>
+        function deleteFunction() {
+            if (confirm("Отключить автопродление подписки?")) {
+                window.location = "{% url 'RecurrentPaymentsCancel' %}";
+            }
+        }
+    </script>
 </head>
 <body>
 <div class="projects-clean">
@@ -60,8 +68,11 @@
                             <div class="dropdown-menu" role="menu"><h6 class="dropdown-header"
                                                                        role="presentation">{{ user.username }}</h6>
                                 {% if user.is_staff %}
-                                    <a class="dropdown-item" role="presentation" href="{% url 'Dashboard' %}">Админка</a>
+                                    <a class="dropdown-item" role="presentation"
+                                       href="{% url 'Dashboard' %}">Админка</a>
                                 {% endif %}
+                                <a class="dropdown-item" role="presentation" {% if user.recurrrecurring_payments %}onclick="deleteFunction()" href="#"{% endif %}>Автопродление
+                                    <input type="checkbox" {% if user.recurrrecurring_payments %}checked{% endif %} disabled></a>
                                 <a class="dropdown-item" role="presentation" href="{% url 'ChangeUserPassword' %}">Изменить
                                     пароль</a>
                                 <a class="dropdown-item" role="presentation" href="{% url 'LogoutUser' %}">Выйти</a>
@@ -86,6 +97,7 @@
                         <li><a href="{% url 'Confidentiality' %}">Конфиденциальность</a></li>
                         <li><a href="{% url 'Offer' %}">Оферта</a></li>
                         <li><a href="{% url 'TermsOfUse' %}">Пользовательское соглашение</a></li>
+                        <li><a href="/admin/article/recurrent">Оферта регулярных платежей</a></li>
                     </ul>
                 </div>
                 <div class="col-sm-4 col-md-3 item">

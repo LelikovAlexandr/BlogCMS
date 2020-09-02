@@ -1,0 +1,17 @@
+{% extends 'users/main.html' %}
+{% load static %}
+{% block title %}{{ caption }}{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
+                <div class="intro">
+                    <h1 class="text-center">{{ caption }}</h1>
+                </div>
+                <div class="text">
+                    {{ text|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

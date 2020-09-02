@@ -25,6 +25,7 @@ class User(AbstractUser):
     available_video = models.ManyToManyField(Video)
     available_file = models.ManyToManyField(File)
     init_password = models.CharField(max_length=10, default='')
+    recurrrecurring_payments = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["subscribe_until"]

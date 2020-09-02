@@ -71,11 +71,11 @@
                                 {% for price in prices %}
                                     <option value="{{ price.price }}.00">{{ price.number_of_months }}
                                         {% if price.number_of_months == 1 %}
-                                        месяц,
+                                            месяц,
                                         {% elif price.number_of_months < 5 %}
-                                        месяца,
+                                            месяца,
                                         {% else %}
-                                        месяцев,
+                                            месяцев,
                                         {% endif %}
                                         {{ price.price }}₽
                                     </option>
@@ -83,8 +83,18 @@
                             </select>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="offer" required/>
-                                <label class="form-check-label" for="offer">Согласен с условиями <a href="{% url 'Offer' %}">оферты</a></label>
+                                <label class="form-check-label" for="offer">Я принимаю условия <a
+                                        href="{% url 'Offer' %}">оферты</a></label>
                             </div>
+                            {% if not user.recurrrecurring_payments %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="recurrent"/>
+                                    <label class="form-check-label" for="recurrent">Автоматически продлить подписку
+                                        после ее окончания. Я принимаю <a href="/admin/article/recurrent">оферту
+                                            регулярных
+                                            платежей</a></label>
+                                </div>
+                            {% endif %}
                             <div class="alert alert-danger mt-2 mb-0" id="message" hidden></div>
                             <button
                                     class="btn btn-primary btn-block text-white btn-user mt-2 col-12"

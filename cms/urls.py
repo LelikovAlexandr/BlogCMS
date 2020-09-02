@@ -15,4 +15,5 @@ urlpatterns = [
     url(r'^offer/$', views.Offer.as_view(), name='Offer'),
     url(r'^terms/$', views.TermsOfUse.as_view(), name='TermsOfUse'),
     url(r'^chart/$', views.unsubscribe_chart, name='UnsubscribeChart'),
+    url(r'^article/(?P<slug>[\w-]+)/$', views.Article.as_view(), name='Article'),
 ]

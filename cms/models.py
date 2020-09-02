@@ -16,6 +16,15 @@ class Price(models.Model):
         return str(self.number_of_months)
 
 
+class Article(models.Model):
+    caption = models.CharField(max_length=150)
+    text = models.TextField(default='', null=True, blank=True)
+    slug = models.SlugField(max_length=150, default='', null=True, blank=True)
+
+    def __str__(self):
+        return self.caption
+
+
 class EmailTemplate(models.Model):
     """
     Email templates get stored in database so that admins can

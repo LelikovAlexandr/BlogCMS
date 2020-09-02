@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from cms.models import EmailTemplate, Price
+from cms.models import EmailTemplate, Price, Article
 from orders.models import Order
 from users.models import User
 from videos.models import Video
@@ -12,3 +12,4 @@ admin.site.register(Order)
 admin.site.register(Price)
 admin.site.register(EmailTemplate)
 admin.site.register(Video)
+admin.site.register(Article)

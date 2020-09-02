@@ -1,5 +1,4 @@
 import csv
-import json
 from operator import attrgetter
 
 from dateutil.relativedelta import relativedelta
@@ -7,7 +6,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.db.models import Count, Min, Q, Sum
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.decorators.http import require_GET
@@ -15,6 +14,7 @@ from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from cms.models import Price
+from cms.models import Article as ArticleModel
 from orders.models import Order
 from users.models import User, UserStatus
 
@@ -85,6 +85,17 @@ def get_difference(request):
         'paid_by_not_followers': paid_by_not_followers,
         'followers_by_not_paid': followers_by_not_paid_set,
     })
+
+
+class Article(TemplateView):
+    template_name = 'cms/article.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        article = get_object_or_404(ArticleModel, slug=self.kwargs['slug'])
+        context['caption'] = article.caption
+        context['text'] = article.text
+        return context
 
 
 class PriceCreate(LoginRequiredMixin, CreateView):

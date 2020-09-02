@@ -24,5 +24,7 @@ urlpatterns = [
         name='ChangeUserStatus'),
     url(r'^list/$', staff_member_required(views.UserList.as_view()), name='UsersList'),
     url('^renew/$', views.RenewSubscription.as_view(), name='RenewSubscription'),
-    url('^renew/generate_payment/$', views.generate_payment, name='GeneratePayment')
+    url('^renew/generate_payment/$', views.generate_payment, name='GeneratePayment'),
+    url('^recurrent_payments_cancel/$', views.recurrent_payments_cancel,
+        name='RecurrentPaymentsCancel')
 ]
