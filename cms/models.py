@@ -17,7 +17,7 @@ class Price(models.Model):
 
 
 class ArticleCategory(models.Model):
-    name = models.CharField(max_length=150, null=True, default=None)
+    name = models.CharField(max_length=150)
 
     def __str__(self):
         return self.name
@@ -27,7 +27,8 @@ class Article(models.Model):
     caption = models.CharField(max_length=150)
     text = models.TextField(default='', null=True, blank=True)
     category = models.ForeignKey(ArticleCategory, on_delete=models.CASCADE,
-                                 related_name='category', null=True, blank=True, default=None)
+                                 related_name='category', null=True, blank=True
+                                 )
     slug = models.SlugField(max_length=150, default='', null=True, blank=True)
 
     def __str__(self):
