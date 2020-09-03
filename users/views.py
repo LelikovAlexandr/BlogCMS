@@ -24,9 +24,10 @@ from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import DeleteView, UpdateView
 
 from cms.models import Price
-from files.models import FileCategory
+from files.models import FileCategory, File
 from orders.models import Order
 from outer_modules.modulbank import get_signature
+from videos.models import Video
 from users.forms import UserEditForm
 from users.models import User, UserStatus
 
@@ -89,6 +90,26 @@ def recurrent_payments_cancel(request):
     user = User.objects.get(username=request.user)
     user.recurrrecurring_payments = False
     user.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def update_available_video(request, pk):
+    action = request.GET.get('action')
+    video_id = request.GET.get('id')
+    if action == 'add':
+        User.objects.get(id=pk).available_video.add(Video.objects.get(id=video_id))
+    else:
+        User.objects.get(id=pk).available_video.remove(Video.objects.get(id=video_id))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def update_available_file(request, pk):
+    action = request.GET.get('action')
+    file_id = request.GET.get('id')
+    if action == 'add':
+        User.objects.get(id=pk).available_file.add(File.objects.get(id=file_id))
+    else:
+        User.objects.get(id=pk).available_file.remove(File.objects.get(id=file_id))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -165,6 +186,12 @@ class UpdateUser(UpdateView, LoginRequiredMixin):
     form_class = UserEditForm
     template_name = 'users/edit_user.html'
     success_url = reverse_lazy('UsersList')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['videos'] = Video.objects.all()
+        context['files'] = File.objects.all()
+        return context
 
 
 class DeleteUser(DeleteView, LoginRequiredMixin):

@@ -5,7 +5,8 @@
         <div class="row d-flex justify-content-center">
             <div class="col-md-12 col-lg-6">
                 <div class="card shadow-lg o-hidden border-0">
-                    <div class="card-header"><p class="text-primary m-0 font-weight-bold">Редактирование пользователя</p></div>
+                    <div class="card-header"><p class="text-primary m-0 font-weight-bold">Редактирование
+                        пользователя</p></div>
                     <div class="card-body">
                         <div class="form-group">
                             <form method="post">
@@ -43,6 +44,72 @@
                                     </button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-12 col-lg-4 mb-1 mt-2">
+                <div class="card shadow-lg o-hidden border-0 ">
+                    <div class="card-header"><p class="text-primary m-0 font-weight-bold">Доступные видео</p></div>
+                    <div class="card-body pt-1">
+                        <div class="table-responsive-sm table-borderless table mt-0" id="dataTable" role="grid"
+                             aria-describedby="dataTable_info">
+                            <table class="table  table-sm dataTable my-0" id="dataTable">
+                                <thead>
+                                <tr>
+                                    <th>Название</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for video in videos %}
+                                    <tr>
+                                        <td>
+                                            {% if video in user.available_video.all %}
+                                                <a class="text-success"
+                                                   href="{% url 'UpdateAvailableVideo' pk=user.id %}?action=remove&id={{ video.id }}">{{ video }}</a>
+                                            {% else %}
+                                                <a class="text-danger"
+                                                   href="{% url 'UpdateAvailableVideo' pk=user.id %}?action=add&id={{ video.id }}">{{ video }}</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-4 mb-4 mt-2">
+                <div class="card shadow-lg o-hidden border-0 ">
+                    <div class="card-header"><p class="text-primary m-0 font-weight-bold">Доступные документы</p></div>
+                    <div class="card-body pt-1">
+                        <div class="table-responsive-sm table-borderless table mt-0" id="dataTable" role="grid"
+                             aria-describedby="dataTable_info">
+                            <table class="table  table-sm dataTable my-0" id="dataTable">
+                                <thead>
+                                <tr>
+                                    <th>Название</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for file in files %}
+                                    <tr>
+                                        <td>
+                                            {% if file in user.available_file.all %}
+                                                <a class="text-success"
+                                                   href="{% url 'UpdateAvailableFile' pk=user.id %}?action=remove&id={{ file.id }}">{{ file }}</a>
+                                            {% else %}
+                                                <a class="text-danger"
+                                                   href="{% url 'UpdateAvailableFile' pk=user.id %}?action=add&id={{ file.id }}">{{ file }}</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
