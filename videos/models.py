@@ -31,7 +31,8 @@ class Video(models.Model):
         ordering = ["-publish_date"]
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.caption)
+        slug = slugify(self.caption)
+        self.slug = '{}-{}'.format(self.id, slug)
         super().save(*args, **kwargs)
 
     def __str__(self):

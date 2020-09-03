@@ -1,5 +1,6 @@
 from django.db import models
 from pytils.translit import slugify
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class FileCategory(models.Model):
@@ -29,7 +30,8 @@ class File(models.Model):
         ordering = ["name"]
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        slug = slugify(self.name)
+        self.slug = '{}-{}'.format(self.id, slug)
         super().save(*args, **kwargs)
 
     def __str__(self):
