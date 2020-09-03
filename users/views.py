@@ -24,12 +24,12 @@ from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import DeleteView, UpdateView
 
 from cms.models import Price
-from files.models import FileCategory, File
+from files.models import File, FileCategory
 from orders.models import Order
 from outer_modules.modulbank import get_signature
-from videos.models import Video
 from users.forms import UserEditForm
 from users.models import User, UserStatus
+from videos.models import Video
 
 logger = logging.getLogger(__name__)
 
@@ -189,8 +189,8 @@ class UpdateUser(UpdateView, LoginRequiredMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['videos'] = Video.objects.all()
-        context['files'] = File.objects.all()
+        context['videos'] = Video.objects.all().order_by('caption')
+        context['files'] = File.objects.all().order_by('name')
         return context
 
 
