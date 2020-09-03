@@ -19,7 +19,7 @@
                                 <tbody>
                                 {% for user in unsubscribe_users %}
                                     <tr>
-                                        <td><a href="{% url 'UserEdit' pk=user.pk %}">{{ user.username }}</a></td>
+                                        <td><a href="https://instagram.com/{{ user.username }}">{{ user.username }}</a></td>
                                         <td>{{ user.subscribe_until|date:'d E Y' }}</td>
                                     </tr>
                                 {% endfor %}
