@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^price/(?P<pk>\d+)/delete/$', views.PriceDelete.as_view(), name='PriceDelete'),
     url(r'^chart/$', views.unsubscribe_chart, name='UnsubscribeChart'),
     url(r'^article/(?P<slug>[\w-]+)/$', views.Article.as_view(), name='Article'),
+    url(r'^echo/$', views.echo_to_telegram)
 ]

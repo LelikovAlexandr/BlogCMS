@@ -1,11 +1,13 @@
 import csv
 from operator import attrgetter
-
+import requests
+import os
 from dateutil.relativedelta import relativedelta
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.db.models import Count, Min, Q, Sum
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -85,6 +87,24 @@ def get_difference(request):
         'paid_by_not_followers': paid_by_not_followers,
         'followers_by_not_paid': followers_by_not_paid_set,
     })
+
+
+def echo_to_telegram(request):
+    from dotenv import load_dotenv
+    load_dotenv()
+
+    request_body = dict(request.POST)
+    pretty_body = ''
+    for key, value in request_body.items():
+        pretty_body += '{}: {}\n'.format(key, value)
+    bot_id = os.getenv('TELEGRAM_BOT_ID')
+    chat_id = os.getenv('TELEGRAM_CHAT_ID')
+    text = 'https://api.telegram.org/{}/sendMessage?chat_id={}&parse_mode=Markdown&text={}'.format(
+        bot_id,
+        chat_id,
+        pretty_body)
+    requests.get(text)
+    return HttpResponse('OK', status=200)
 
 
 class Article(TemplateView):

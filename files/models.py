@@ -1,6 +1,6 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from pytils.translit import slugify
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class FileCategory(models.Model):
