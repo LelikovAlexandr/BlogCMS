@@ -39,6 +39,7 @@ def generate_payment(request):
     username = request.POST.get('username').replace('@', '').replace(' ', '').lower()
     email = request.POST.get('email')
     amount = request.POST.get('amount')
+    is_recurrent = request.POST.get('recurrent')
     order_id = int(Order.objects.aggregate(Max('order_id')).get('order_id__max')) + 1
     body = {
         'merchant': os.getenv('MODULBANK_MERCHANT_ID'),
@@ -50,6 +51,8 @@ def generate_payment(request):
         'success_url': os.getenv('MODULBANK_SUCCESS_URL'),
         'testing': int(os.getenv('MODULBANK_TEST', 0)),
         'unix_timestamp': int(time()),
+        'callback_url': os.getenv('MODULBANK_CALLBACK_URL'),
+        'start_recurrent': 1 if is_recurrent else 0,
         'receipt_items': json.dumps({
             'name': 'Оплата доступа в блог',
             'quantity': 1,

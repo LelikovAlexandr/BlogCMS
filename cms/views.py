@@ -1,7 +1,8 @@
 import csv
-from operator import attrgetter
-import requests
 import os
+from operator import attrgetter
+
+import requests
 from dateutil.relativedelta import relativedelta
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -99,7 +100,7 @@ def echo_to_telegram(request):
         pretty_body += '{}: {}\n'.format(key, value)
     bot_id = os.getenv('TELEGRAM_BOT_ID')
     chat_id = os.getenv('TELEGRAM_CHAT_ID')
-    text = 'https://api.telegram.org/{}/sendMessage?chat_id={}&parse_mode=Markdown&text={}'.format(
+    text = 'https://api.telegram.org/{}/sendMessage?chat_id={}&text={}'.format(
         bot_id,
         chat_id,
         pretty_body)
