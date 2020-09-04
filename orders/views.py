@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 from cms.models import Price
 from cms.tasks import send_email
 from files.models import File
-from orders.models import Order
+from orders.models import Order, RecurrentPayment
 from outer_modules.modulbank import get_signature
 from users.models import User, UserStatus
 
@@ -63,6 +63,12 @@ def calculate_new_period(create, user):
     return start_new_period, template
 
 
+def add_recurrent_payment(username, transaction_id, amount):
+    RecurrentPayment.objects.create(username=User.objects.get(username=username),
+                                    transaction_id=transaction_id,
+                                    amount=amount)
+
+
 class OrderDelete(DeleteView, LoginRequiredMixin):
     model = Order
     success_url = reverse_lazy('OrdersList')
@@ -90,6 +96,7 @@ class OrderCreate(CreateView):
         username = data.get('client_name').replace('@', '').replace(' ', '').lower()
         amount = int(float(data.get('amount')))
         order_id = data.get('order_id')
+        transaction_id = data.get('transaction_id')
 
         if is_signature_ok(data) and is_uniq_order(order_id, amount, username):
 
@@ -108,19 +115,26 @@ class OrderCreate(CreateView):
             context = {'subscribe_until': formatted_date,
                        'init_password': user.init_password,
                        'username': user.username}
+
             if settings.DEBUG:
                 result = 'Sent email to {}\n with template {}\n and context: {}'.format(
                     user.email, template, context)
             else:
                 send_email.delay(template, user.email, context=context)
                 result = 'Order created'
+
             if data.get('is_admin'):
                 order_id = int(Order.objects.aggregate(Max('order_id')).get('order_id__max')) + 1
                 Order.objects.create(order_id=order_id, amount=amount, is_paid=False)
+
             order = Order.objects.get(order_id=order_id)
             order.username = User.objects.get(username=username)
             if not data.get('is_free_user'):
                 order.is_paid = True
+            if order.is_recurrent:
+                user.recurring_payments = True
+                add_recurrent_payment(user.username, transaction_id, amount)
+                user.save()
             order.save()
 
             logger.debug('User {} with email {} created successful'.format(user.username, user.email))

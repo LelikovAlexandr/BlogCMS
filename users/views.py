@@ -39,7 +39,7 @@ def generate_payment(request):
     username = request.POST.get('username').replace('@', '').replace(' ', '').lower()
     email = request.POST.get('email')
     amount = request.POST.get('amount')
-    is_recurrent = request.POST.get('recurrent')
+    is_recurrent = True if request.POST.get('recurrent') else False
     order_id = int(Order.objects.aggregate(Max('order_id')).get('order_id__max')) + 1
     body = {
         'merchant': os.getenv('MODULBANK_MERCHANT_ID'),
@@ -70,7 +70,10 @@ def generate_payment(request):
             os.getenv('MODULBANK_SECRET_KEY'), body)
     }
     body.update(signature)
-    Order.objects.create(order_id=order_id, amount=int(float(amount)), is_paid=False)
+    Order.objects.create(order_id=order_id,
+                         amount=int(float(amount)),
+                         is_paid=False,
+                         is_recurrent=is_recurrent)
     return render(request, 'users/generate_payment.html', body)
 
 
@@ -91,7 +94,7 @@ def change_user_status(request):
 @login_required()
 def recurrent_payments_cancel(request):
     user = User.objects.get(username=request.user)
-    user.recurrrecurring_payments = False
+    user.recurring_payments = False
     user.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
