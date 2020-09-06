@@ -1,0 +1,35 @@
+[
+  {
+    "model": "orders.order",
+    "pk": 1,
+    "fields": {
+      "order_id": "1",
+      "username": 1,
+      "created_datetime": "2020-05-23T22:05:19.537",
+      "amount": 1800,
+      "is_paid": true,
+      "is_recurrent": false
+    }
+  },
+  {
+    "model": "orders.order",
+    "pk": 2,
+    "fields": {
+      "order_id": "2",
+      "username": 2,
+      "created_datetime": "2020-05-23T22:05:19.537",
+      "amount": 1800,
+      "is_paid": true,
+      "is_recurrent": true
+    }
+  },
+  {
+    "model": "orders.recurrentpayment",
+    "pk": 1,
+    "fields": {
+      "username": 2,
+      "transaction_id": "12345qwert",
+      "amount": 1800
+    }
+  }
+]

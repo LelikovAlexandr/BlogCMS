@@ -36,6 +36,11 @@ logger = logging.getLogger(__name__)
 
 @require_POST
 def generate_payment(request):
+    """
+    Generate payment params to POST request to Modulbank
+    :param request: request
+    :return:
+    """
     username = request.POST.get('username').replace('@', '').replace(' ', '').lower()
     email = request.POST.get('email')
     amount = request.POST.get('amount')
@@ -80,6 +85,11 @@ def generate_payment(request):
 @require_POST
 @staff_member_required
 def change_user_status(request):
+    """
+    Change user status in system
+    :param request: request
+    :return:
+    """
     data = request.POST.dict()
     user = User.objects.get(username=data.get('username'))
     status = data.get('status')
@@ -93,13 +103,25 @@ def change_user_status(request):
 
 @login_required()
 def recurrent_payments_cancel(request):
+    """
+    Cancel recurrent payments for user
+    :param request: request
+    :return:
+    """
     user = User.objects.get(username=request.user)
     user.recurring_payments = False
     user.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@staff_member_required
 def update_available_video(request, pk):
+    """
+    Add or delete video from user available video list
+    :param request: request
+    :param pk: Video ID
+    :return:
+    """
     action = request.GET.get('action')
     video_id = request.GET.get('id')
     if action == 'add':
@@ -109,7 +131,14 @@ def update_available_video(request, pk):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@staff_member_required
 def update_available_file(request, pk):
+    """
+     Add or delete file from user available video list
+     :param request: request
+     :param pk: File ID
+     :return:
+     """
     action = request.GET.get('action')
     file_id = request.GET.get('id')
     if action == 'add':
@@ -120,6 +149,9 @@ def update_available_file(request, pk):
 
 
 class UserList(LoginRequiredMixin, TemplateView):
+    """
+    List of users
+    """
     template_name = 'users/users_list.html'
 
     def get_context_data(self, **kwargs):
@@ -132,10 +164,16 @@ class UserList(LoginRequiredMixin, TemplateView):
 
 
 class UserAccount(LoginRequiredMixin, TemplateView):
+    """
+    User account page
+    """
     template_name = 'users/user_account.html'
 
 
 class UserFiles(LoginRequiredMixin, ListView):
+    """
+    List of available for user files
+    """
     template_name = 'users/files.html'
     context_object_name = 'files'
 
@@ -151,11 +189,17 @@ class UserFiles(LoginRequiredMixin, ListView):
 
 
 class LoginUser(LoginView):
+    """
+    Login page
+    """
     template_name = 'users/user_login.html'
     pass
 
 
 class LogoutUser(LoginRequiredMixin, LogoutView):
+    """
+    Logout
+    """
     next_page = reverse_lazy('LoginUser')
 
 
@@ -188,6 +232,9 @@ class PasswordResetComplete(PasswordResetCompleteView):
 
 
 class UpdateUser(UpdateView, LoginRequiredMixin):
+    """
+    Change user parameters
+    """
     model = User
     form_class = UserEditForm
     template_name = 'users/edit_user.html'
@@ -201,11 +248,17 @@ class UpdateUser(UpdateView, LoginRequiredMixin):
 
 
 class DeleteUser(DeleteView, LoginRequiredMixin):
+    """
+    Delete user
+    """
     model = User
     success_url = reverse_lazy('UsersList')
 
 
 class RenewSubscription(TemplateView):
+    """
+    Page with payments form
+    """
     template_name = 'users/renew_subscription.html'
 
     def get_context_data(self, **kwargs):

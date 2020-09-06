@@ -1,7 +1,6 @@
 import logging
-import os
 from operator import attrgetter
-
+from outer_modules.modulbank import is_signature_ok
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -20,7 +19,6 @@ from cms.models import Price
 from cms.tasks import send_email
 from files.models import File
 from orders.models import Order, RecurrentPayment
-from outer_modules.modulbank import get_signature
 from users.models import User, UserStatus
 
 logger = logging.getLogger(__name__)
@@ -28,18 +26,14 @@ logger = logging.getLogger(__name__)
 load_dotenv()
 
 
-def is_signature_ok(data):
-    signature = data.get('signature')
-    if (get_signature(os.getenv('MODULBANK_SECRET_KEY'), data) == signature
-            or get_signature(os.getenv('MODULBANK_TEST_SECRET_KEY'), data) == signature
-            or os.getenv('MODULBANK_TEST_SIGNATURE') == signature):
-        return True
-    else:
-        logger.warning('Order {}: Signature error'.format(data.get('order_id')))
-        return False
-
-
 def is_uniq_order(order_id, amount, username):
+    """
+    Check uniqueness of new order
+    :param order_id: Order id
+    :param amount: Order amount
+    :param username: Username
+    :return: True if order isn't in database
+    """
     try:
         name = User.objects.get(username=username)
         Order.objects.get(order_id=order_id, amount=amount, username=name)
@@ -50,6 +44,12 @@ def is_uniq_order(order_id, amount, username):
 
 
 def calculate_new_period(create, user):
+    """
+    Calculates from which date to add a new period
+    :param create: True if user isn't in database
+    :param user: User for which the date is calculated
+    :return: (Date from which start new period, type of email template)
+    """
     if create:
         start_new_period = timezone.now().date()
         template = 'NEW_USER'
@@ -64,17 +64,30 @@ def calculate_new_period(create, user):
 
 
 def add_recurrent_payment(username, transaction_id, amount):
+    """
+    Add new record to RecurrentPayment table in database
+    :param username: User who checked recurrent payment checkbox
+    :param transaction_id: ID of initial recurrent payment transaction
+    :param amount: Order amount for further transaction
+    :return: None
+    """
     RecurrentPayment.objects.create(username=User.objects.get(username=username),
                                     transaction_id=transaction_id,
                                     amount=amount)
 
 
 class OrderDelete(DeleteView, LoginRequiredMixin):
+    """
+    Delete selected order
+    """
     model = Order
     success_url = reverse_lazy('OrdersList')
 
 
 class OrderList(LoginRequiredMixin, TemplateView):
+    """
+    List of orders
+    """
     template_name = 'orders/orders_list.html'
 
     def get_context_data(self, **kwargs):
@@ -85,6 +98,9 @@ class OrderList(LoginRequiredMixin, TemplateView):
 
 
 class OrderCreate(CreateView):
+    """
+    Create new order
+    """
     model = Order
     fields = '__all__'
     template_name = 'orders/create_order.html'
@@ -108,7 +124,7 @@ class OrderCreate(CreateView):
                 user.set_password(user.init_password)
             start_new_period, template = calculate_new_period(create, user)
             user.subscribe_until = start_new_period + relativedelta(months=number_of_months)
-            user.available_file.add(* File.objects.values_list('id', flat=True))
+            user.available_file.add(*File.objects.values_list('id', flat=True))
             user.save()
 
             formatted_date = dateformat.format(user.subscribe_until, settings.DATE_FORMAT)
@@ -137,7 +153,8 @@ class OrderCreate(CreateView):
                 user.save()
             order.save()
 
-            logger.debug('User {} with email {} created successful'.format(user.username, user.email))
+            logger.debug(
+                'User {} with email {} created successful'.format(user.username, user.email))
         else:
             result = 'Error'
 

@@ -17,6 +17,12 @@ from users.models import User
 
 @login_required
 def download(request, slug):
+    """
+    Generate response with path to file. Protect from unauthorized access
+    :param request: Request
+    :param slug: File's slug to download
+    :return: Response with path to download file
+    """
     file = get_object_or_404(File, slug=slug)
     response = HttpResponse(content_type='application/force-download')
     if not request.headers.get('X-Real-Ip'):
@@ -38,6 +44,9 @@ def download(request, slug):
 
 
 class UploadFile(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+    """
+    Page with upload file form
+    """
     model = File
     fields = '__all__'
     template_name = 'files/upload_file.html'
@@ -45,6 +54,11 @@ class UploadFile(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     success_message = 'Файл успешно добавлен'
 
     def form_valid(self, form):
+        """
+        Add file to active users
+        :param form: Form
+        :return: Form
+        """
         self.object = form.save()
         if self.object.category.available_to_active_subscribers:
             user_list = User.objects.filter(subscribe_until__gt=timezone.now().date())
@@ -56,6 +70,9 @@ class UploadFile(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
 
 class FilesList(LoginRequiredMixin, ListView):
+    """
+    List of uploaded files
+    """
     model = File
     template_name = 'files/files_list.html'
 
@@ -66,6 +83,9 @@ class FilesList(LoginRequiredMixin, ListView):
 
 
 class UpdateFile(LoginRequiredMixin, UpdateView):
+    """
+    Edit uploaded file parameters
+    """
     model = File
     fields = '__all__'
     template_name = 'files/update_file.html'
@@ -73,11 +93,17 @@ class UpdateFile(LoginRequiredMixin, UpdateView):
 
 
 class DeleteFile(LoginRequiredMixin, DeleteView):
+    """
+    Delete uploaded file
+    """
     model = File
     success_url = reverse_lazy('FilesList')
 
 
 class AddFileCategory(LoginRequiredMixin, CreateView):
+    """
+    Add new files category
+    """
     model = FileCategory
     fields = '__all__'
     template_name = 'files/create_category.html'
@@ -85,11 +111,17 @@ class AddFileCategory(LoginRequiredMixin, CreateView):
 
 
 class FileCategoryList(LoginRequiredMixin, ListView):
+    """
+    List of files category
+    """
     model = FileCategory
     template_name = 'files/category_list.html'
 
 
 class UpdateFileCategory(LoginRequiredMixin, UpdateView):
+    """
+    Edit files category
+    """
     model = FileCategory
     fields = '__all__'
     template_name = 'files/update_category.html'
@@ -97,5 +129,8 @@ class UpdateFileCategory(LoginRequiredMixin, UpdateView):
 
 
 class DeleteFileCategory(LoginRequiredMixin, DeleteView):
+    """
+    Delete files category
+    """
     model = FileCategory
     success_url = reverse_lazy('FilesList')

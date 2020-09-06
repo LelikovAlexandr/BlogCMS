@@ -12,7 +12,6 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.utils import timezone
-from django.views.decorators.http import require_GET
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
@@ -22,54 +21,34 @@ from orders.models import Order
 from users.models import User, UserStatus
 
 
-@require_GET
-@staff_member_required
-def dashboard(request):
-    added_status = UserStatus.objects.get(name='Added')
-    today_users = User.objects.filter(
-        Q(date_joined__date=timezone.now().date()) | ~Q(status=added_status))
-    number_of_users = number_of_paid_users()
-    nearest_unsubscribe_date = User.objects.filter(
-        subscribe_until__gt=timezone.datetime.now().date()).aggregate(Min('subscribe_until')).get(
-        'subscribe_until__min')
-    today_revenue = Order.objects.filter(created_datetime__date=timezone.now().date(),
-                                         is_paid=True)
-    context = {
-        'today_users': sorted(today_users, key=attrgetter('status.id', 'username')),
-        'number_of_paid_users': number_of_users,
-        'number_of_unsubscribing_users': User.objects.filter(
-            subscribe_until=nearest_unsubscribe_date).count(),
-        'nearest_unsubscribe_date': nearest_unsubscribe_date,
-        'today_revenue': today_revenue.aggregate(Sum('amount')).get('amount__sum') or 0,
-        'today_orders_counts': today_revenue.count(),
-        'number_of_not_returned_user': not_returned_user().count()
-    }
-    return render(request, 'cms/dashboard.html', context=context)
-
-
-def list_to_unsubscribe(request):
-    unsubscribe_users = User.objects.filter(subscribe_until=timezone.now().date())
-    return render(request, 'cms/unsubscribe.html',
-                  context={'unsubscribe_users': unsubscribe_users})
-
-
 def number_of_paid_users():
+    """
+    Number of paid users
+    :return: Number of paid users
+    """
     return User.objects.exclude(
         Q(subscribe_until=None) | Q(subscribe_until__lte=timezone.now().date())).count()
 
 
 def not_returned_user():
+    """
+    Not returned users
+    :return: Queryset of not returned users
+    """
     return User.objects.filter(subscribe_until__lte=timezone.now().date())
 
 
 @staff_member_required
 def get_difference(request):
+    """
+    Show paid by not followers users and followers by not paid users
+    """
     if request.method == 'POST':
         file = request.FILES['file']
         decoded_file = file.read().decode('utf-8').splitlines()
         set_of_followers = set()
-        for i in csv.DictReader(decoded_file):
-            set_of_followers.add(i['username'])
+        for follower in csv.DictReader(decoded_file):
+            set_of_followers.add(follower['username'])
         cache.set('followers', set(set_of_followers), 300)
     if cache.get('followers') is None:
         return render(request, 'cms/upload_followers_file.html')
@@ -91,6 +70,9 @@ def get_difference(request):
 
 
 def echo_to_telegram(request):
+    """
+    Send body of POST request to telegram bot
+    """
     from dotenv import load_dotenv
     load_dotenv()
 
@@ -108,7 +90,52 @@ def echo_to_telegram(request):
     return HttpResponse('OK', status=200)
 
 
+class AdminDashboard(TemplateView):
+    """
+    Admin's dashboard
+    """
+    template_name = 'cms/dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        added_status = UserStatus.objects.get(name='Added')
+        today_users = User.objects.filter(
+            Q(date_joined__date=timezone.now().date()) | ~Q(status=added_status))
+        number_of_users = number_of_paid_users()
+        nearest_unsubscribe_date = User.objects.filter(
+            subscribe_until__gt=timezone.datetime.now().date()).aggregate(
+            Min('subscribe_until')).get(
+            'subscribe_until__min')
+        today_revenue = Order.objects.filter(created_datetime__date=timezone.now().date(),
+                                             is_paid=True)
+        context = super().get_context_data(**kwargs)
+        context['today_users'] = sorted(today_users, key=attrgetter('status.id', 'username'))
+        context['number_of_paid_users'] = number_of_users
+        context['number_of_unsubscribing_users'] = User.objects.filter(
+            subscribe_until=nearest_unsubscribe_date).count()
+        context['nearest_unsubscribe_date'] = nearest_unsubscribe_date,
+        context['today_revenue'] = today_revenue.aggregate(Sum('amount')).get('amount__sum') or 0
+        context['today_orders_counts'] = today_revenue.count()
+        context['number_of_not_returned_user'] = not_returned_user().count()
+        return context
+
+
+class ListForUnsubscribe(TemplateView):
+    """
+    Show list for today unsubscribe
+    """
+    template_name = 'cms/unsubscribe.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        unsubscribe_users = User.objects.filter(subscribe_until=timezone.now().date())
+        context['unsubscribe_users'] = unsubscribe_users
+        return context
+
+
 class Article(TemplateView):
+    """
+    Generate page with article from database
+    """
     template_name = 'cms/article.html'
 
     def get_context_data(self, **kwargs):
@@ -120,6 +147,9 @@ class Article(TemplateView):
 
 
 class PriceCreate(LoginRequiredMixin, CreateView):
+    """
+    Add new price for period
+    """
     model = Price
     fields = ('price', 'number_of_months')
     template_name = 'cms/create_price.html'
@@ -127,11 +157,17 @@ class PriceCreate(LoginRequiredMixin, CreateView):
 
 
 class PriceList(LoginRequiredMixin, ListView):
+    """
+    Show price list
+    """
     model = Price
     template_name = 'cms/price_list.html'
 
 
 class PriceUpdate(LoginRequiredMixin, UpdateView):
+    """
+    Update price for period
+    """
     model = Price
     fields = ('price', 'number_of_months')
     success_url = reverse_lazy('PriceList')
@@ -139,20 +175,30 @@ class PriceUpdate(LoginRequiredMixin, UpdateView):
 
 
 class PriceDelete(LoginRequiredMixin, DeleteView):
+    """
+    Delete price for period
+    """
     model = Price
     success_url = reverse_lazy('PriceList')
 
 
-@staff_member_required
-def unsubscribe_chart(request):
-    chart_data = User.objects.filter(subscribe_until__gte=timezone.now().date(),
-                                     subscribe_until__lte=timezone.now().date() + relativedelta(
-                                         months=1)).values(
-        'subscribe_until').annotate(total=Count('subscribe_until'))
-    unsubscribers = []
-    days = []
-    for day in chart_data:
-        unsubscribers.append(int(day.get('total')))
-        days.append(float(day.get('subscribe_until').strftime('%d.%m')))
-    return render(request, 'cms/unsubscribe_chart.html',
-                  {'unsubscribers': unsubscribers, 'days': days})
+class UnsubscribeChart(TemplateView):
+    """
+    Show chart of unsubscribe users for a month in advance
+    """
+    template_name = 'cms/unsubscribe_chart.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        chart_data = User.objects.filter(subscribe_until__gte=timezone.now().date(),
+                                         subscribe_until__lte=timezone.now().date() + relativedelta(
+                                             months=1)).values(
+            'subscribe_until').annotate(total=Count('subscribe_until'))
+        unsubscribers = []
+        days = []
+        for day in chart_data:
+            unsubscribers.append(int(day.get('total')))
+            days.append(float(day.get('subscribe_until').strftime('%d.%m')))
+        context['unsubscribers'] = unsubscribers
+        context['days'] = days
+        return context

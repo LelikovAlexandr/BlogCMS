@@ -10,10 +10,4 @@ urlpatterns = [
         name='UpdateVideo'),
     url(r'^(?P<slug>[\w-]+)/delete/$', staff_member_required(views.DeleteVideo.as_view()),
         name='DeleteVideo'),
-    url(r'^tags/$', views.TagsList.as_view(), name='TagList'),
-    url(r'^tag/add$', staff_member_required(views.AddTag.as_view()), name='AddTag'),
-    url(r'^tag/(?P<slug>[\w-]+)/edit/$', staff_member_required(views.UpdateTag.as_view()),
-        name='UpdateTag'),
-    url(r'^tag/(?P<slug>[\w-]+)/delete/$', staff_member_required(views.DeleteTag.as_view()),
-        name='DeleteTag'),
 ]

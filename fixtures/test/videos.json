@@ -1,0 +1,14 @@
+[
+  {
+    "model": "videos.video",
+    "pk": 1,
+    "fields": {
+      "caption": "test video caption",
+      "description": "test video description",
+      "video_code": "TeSt_CODe",
+      "publish_date": "2020-06-02",
+      "slug": "test_video_caption",
+      "tags": []
+    }
+  }
+]

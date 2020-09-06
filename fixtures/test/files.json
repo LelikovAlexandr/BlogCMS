@@ -1,0 +1,22 @@
+[
+  {
+    "model": "files.filecategory",
+    "pk": 1,
+    "fields": {
+      "name": "test_category",
+      "slug": "test_category",
+      "available_to_active_subscribers": true
+    }
+  },
+  {
+    "model": "files.file",
+    "pk": 1,
+    "fields": {
+      "name": "test_file",
+      "description": "test_file_description",
+      "file": "fixtures/test/test_file.txt",
+      "category": 1,
+      "slug": "test_file"
+    }
+  }
+]
