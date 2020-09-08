@@ -43,6 +43,8 @@ def get_difference(request):
     """
     Show paid by not followers users and followers by not paid users
     """
+    # TODO: Добавить отправку списка на отписку в телеграм в формате: https://instagram.com/{
+    #  USERNAME}
     if request.method == 'POST':
         file = request.FILES['file']
         decoded_file = file.read().decode('utf-8').splitlines()
