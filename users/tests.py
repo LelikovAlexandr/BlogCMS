@@ -1,9 +1,7 @@
-from datetime import datetime
-
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from users.models import User, UserStatus
+from users.models import User
 
 
 class UserCreateTest(TestCase):
