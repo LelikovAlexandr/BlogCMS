@@ -33,6 +33,8 @@ from videos.models import Video
 
 logger = logging.getLogger(__name__)
 
+# TODO: Сделать черный список подписчиков
+
 
 @require_POST
 def generate_payment(request):
