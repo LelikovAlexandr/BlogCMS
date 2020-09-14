@@ -28,34 +28,16 @@ from rest_framework.viewsets import ViewSet, ModelViewSet
 from cms.models import Price
 from files.models import File, FileCategory
 from orders.models import Order
+from orders.services import incriminate_order_id
 from outer_modules.modulbank import get_signature
 from users.forms import UserEditForm
 from users.models import User, UserStatus
-from users.serializers import UserSerializer
+# from users.serializers import UserSerializer
 from videos.models import Video
 
 logger = logging.getLogger(__name__)
 
 # TODO: Сделать черный список подписчиков
-
-
-# TODO: Сделать черный список подписчиков
-class UserStatusPagination(CursorPagination):
-    page_size = 3
-    ordering = 'id'
-
-
-class UserViewSet(ModelViewSet):
-    serializer_class = UserSerializer
-    queryset = UserStatus.objects.all()
-    pagination_class = UserStatusPagination
-
-    def filter_queryset(self, queryset):
-        for key, value in self.request.query_params.items():
-            if key == 'cursor':
-                continue
-            queryset = queryset.filter(** {key: value})
-        return queryset
 
 @require_POST
 def generate_payment(request):
@@ -68,7 +50,7 @@ def generate_payment(request):
     email = request.POST.get('email')
     amount = request.POST.get('amount')
     is_recurrent = True if request.POST.get('recurrent') else False
-    order_id = int(Order.objects.aggregate(Max('order_id')).get('order_id__max')) + 1
+    order_id = incriminate_order_id()
     body = {
         'merchant': os.getenv('MODULBANK_MERCHANT_ID'),
         'amount': amount,

@@ -1,5 +1,7 @@
 import logging
 from operator import attrgetter
+
+from orders.services import incriminate_order_id
 from outer_modules.modulbank import is_signature_ok
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
@@ -142,7 +144,7 @@ class OrderCreate(CreateView):
 
             if data.get('is_admin'):
                 with transaction.atomic():
-                    order_id = int(Order.objects.aggregate(Max('order_id')).get('order_id__max')) + 1
+                    order_id = incriminate_order_id()
                     Order.objects.create(order_id=order_id, amount=amount, is_paid=False)
 
             order = Order.objects.get(order_id=order_id)
