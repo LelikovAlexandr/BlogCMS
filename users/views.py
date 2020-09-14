@@ -36,6 +36,8 @@ from videos.models import Video
 
 logger = logging.getLogger(__name__)
 
+# TODO: Сделать черный список подписчиков
+
 
 # TODO: Сделать черный список подписчиков
 class UserStatusPagination(CursorPagination):
