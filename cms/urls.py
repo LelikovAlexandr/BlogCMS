@@ -17,5 +17,5 @@ urlpatterns = [
     url(r'^chart/$', staff_member_required(views.UnsubscribeChart.as_view()),
         name='UnsubscribeChart'),
     url(r'^article/(?P<slug>[\w-]+)/$', views.Article.as_view(), name='Article'),
-    url(r'^echo/$', views.echo_to_telegram)
+    url(r'^echo/$', views.echo_to_telegram),
 ]

@@ -14,7 +14,7 @@ from django.contrib.auth.views import (LoginView, LogoutView,
                                        PasswordResetDoneView,
                                        PasswordResetView)
 from django.db.models import Max
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -22,6 +22,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import DeleteView, UpdateView
+from rest_framework.pagination import PageNumberPagination, CursorPagination
+from rest_framework.viewsets import ViewSet, ModelViewSet
 
 from cms.models import Price
 from files.models import File, FileCategory
@@ -29,10 +31,29 @@ from orders.models import Order
 from outer_modules.modulbank import get_signature
 from users.forms import UserEditForm
 from users.models import User, UserStatus
+from users.serializers import UserSerializer
 from videos.models import Video
 
 logger = logging.getLogger(__name__)
 
+
+# TODO: Сделать черный список подписчиков
+class UserStatusPagination(CursorPagination):
+    page_size = 3
+    ordering = 'id'
+
+
+class UserViewSet(ModelViewSet):
+    serializer_class = UserSerializer
+    queryset = UserStatus.objects.all()
+    pagination_class = UserStatusPagination
+
+    def filter_queryset(self, queryset):
+        for key, value in self.request.query_params.items():
+            if key == 'cursor':
+                continue
+            queryset = queryset.filter(** {key: value})
+        return queryset
 
 @require_POST
 def generate_payment(request):

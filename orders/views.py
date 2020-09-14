@@ -14,6 +14,7 @@ from django.utils.crypto import get_random_string
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, DeleteView
 from dotenv import load_dotenv
+from django.db import transaction
 
 from cms.models import Price
 from cms.tasks import send_email
@@ -140,8 +141,9 @@ class OrderCreate(CreateView):
                 result = 'Order created'
 
             if data.get('is_admin'):
-                order_id = int(Order.objects.aggregate(Max('order_id')).get('order_id__max')) + 1
-                Order.objects.create(order_id=order_id, amount=amount, is_paid=False)
+                with transaction.atomic():
+                    order_id = int(Order.objects.aggregate(Max('order_id')).get('order_id__max')) + 1
+                    Order.objects.create(order_id=order_id, amount=amount, is_paid=False)
 
             order = Order.objects.get(order_id=order_id)
             order.username = User.objects.get(username=username)

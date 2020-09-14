@@ -14,5 +14,6 @@ db.sqlite3
 /cache/
 /docker-compose.yml
 /sessions/
-env-*
+env-blogserver
 /staticfiles/
+/frontend/
