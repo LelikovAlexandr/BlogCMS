@@ -17,3 +17,4 @@ igramscraper
 psycopg2-binary
 rollbar
 djangorestframework
+django-cors-headers

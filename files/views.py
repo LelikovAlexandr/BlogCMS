@@ -24,15 +24,15 @@ def download(request, slug):
     :return: Response with path to download file
     """
     file = get_object_or_404(File, slug=slug)
-    response = HttpResponse(content_type='application/force-download')
+    response = HttpResponse()
     if not request.headers.get('X-Real-Ip'):
-        response.status_code = 404
+        response.status_code = 403
         response.content = 'The request should be come from Nginx server.'
         return response
     is_allowed = True if file in get_object_or_404(User,
                                                    username=request.user).available_file.all() else False
     if not is_allowed:
-        response.status_code = 404
+        response.status_code = 403
         response.content = 'You are not allowed to access this file.'
         return response
 
@@ -40,6 +40,7 @@ def download(request, slug):
     response['X-Accel-Redirect'] = os.path.join(STATIC_URL, file.file.url[1:])
     response['Content-Disposition'] = "attachment; filename*=utf-8''{}".format(
         escape_uri_path(file_name))
+    response.status_code = 200
     return response
 
 

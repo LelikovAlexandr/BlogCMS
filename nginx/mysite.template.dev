@@ -2,31 +2,13 @@ upstream proxy-lelikova {
     server web:8000;
 }
 
-server {
-  server_name ${SERVER_NAME};
-  listen 80;
-
-  location ~ /.well-known/acme-challenge {
-              allow all;
-              root /usr/src/propitanie/staticfiles;
-      }
-
-  location / {
-                rewrite ^ https://$host$request_uri? permanent;
-        }
-}
 
 server {
     server_name ${SERVER_NAME};
 
-    listen 443 ssl;
-
-    ssl_certificate /etc/letsencrypt/live/${SERVER_NAME}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/${SERVER_NAME}/privkey.pem;
+    listen 80;
 
     client_max_body_size 4G;
-
-    ssl_dhparam /etc/ssl/certs/dhparam-2048.pem;
 
     location / {
         proxy_pass http://proxy-lelikova;
@@ -37,7 +19,7 @@ server {
         proxy_redirect off;
     }
 
-	location /staticfiles/ {
+    location /staticfiles/ {
         alias /usr/src/propitanie/staticfiles/;
     }
 

@@ -1,6 +1,5 @@
 __pycache__/
 .DS_Store
-dist/
 .coverage
 coverage.xml
 .idea/
@@ -16,9 +15,13 @@ db.sqlite3
 poetry.lock
 pyproject.toml
 README.md
-/env-blogserver
+/env-blogserver*
 /staticfiles/
 /docker-compose.yml*
 /.github/
 !/cache/
 /frontend/
+/.git
+Makefile
+.dockerignore
+Dockerfile
