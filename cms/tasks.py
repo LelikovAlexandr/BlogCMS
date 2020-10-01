@@ -22,7 +22,7 @@ def send_email(template, recipients, **kwargs):
 def send_unsubscribe_notification():
     for user in User.objects.filter(
             subscribe_until=datetime.datetime.now().date() +
-                            datetime.timedelta(DAYS_TO_UNSUBSCRIBE)):
+                            datetime.timedelta(DAYS_TO_UNSUBSCRIBE), recurring_payments=False):
         logger.info('Sending notifications about end of subscription to {}'.format(user.email))
         send_email('DAYS_TO_UNSUBSCRIBE', user.email,
                    context={'DAYS_TO_UNSUBSCRIBE': DAYS_TO_UNSUBSCRIBE})

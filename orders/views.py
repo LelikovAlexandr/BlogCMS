@@ -74,9 +74,9 @@ def add_recurrent_payment(username, transaction_id, amount):
     :param amount: Order amount for further transaction
     :return: None
     """
-    RecurrentPayment.objects.create(username=User.objects.get(username=username),
-                                    transaction_id=transaction_id,
-                                    amount=amount)
+    RecurrentPayment.objects.update_or_create(username=User.objects.get(username=username),
+                                              defaults={'transaction_id': transaction_id,
+                                                        'amount': amount})
 
 
 class OrderDelete(DeleteView, LoginRequiredMixin):
