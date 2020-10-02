@@ -66,6 +66,7 @@ MIDDLEWARE = [
     'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
 ]
 
+CORS_REPLACE_HTTPS_REFERER = False
 CORS_ALLOWED_ORIGINS = [
     'https://propitanie.blog'
 ]
