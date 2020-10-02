@@ -50,25 +50,17 @@ INSTALLED_APPS = [
     'bootstrap4',
     'django_celery_beat',
     'fa',
-    'corsheaders',
-    'rest_framework',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
-]
-
-CORS_REPLACE_HTTPS_REFERER = False
-CORS_ALLOWED_ORIGINS = [
-    'https://propitanie.blog'
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -168,8 +160,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.0/topics/i18n/
 
 LANGUAGE_CODE = 'ru-ru'
 

@@ -36,6 +36,7 @@ from videos.models import Video
 
 logger = logging.getLogger(__name__)
 
+
 # TODO: Сделать черный список подписчиков
 
 @require_POST
@@ -222,7 +223,7 @@ class PasswordReset(PasswordResetView):
     html_email_template_name = 'users/password_reset_email.html'
 
 
-class PasswordResetDone(PasswordResetDoneView):
+class PasswordResetDone(TemplateView):
     template_name = 'users/password_reset_done.html'
 
 
