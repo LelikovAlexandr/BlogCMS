@@ -8,6 +8,8 @@
         <label for="id_subscribe_until">Цена</label>
         <input type="text" name="price" class="form-control mb-2"
                value="{{ form.price.value }}" required id="id_subscribe_until">
+        <label for="hidden">Скрытый</label>
+        <input type="checkbox" name="hidden" {% if form.hidden.value %}checked{% endif %} class="form-control mb-2" id="hidden">
     </form>
     <div class="d-flex justify-content-between">
         <button type="submit" class="btn btn-success" form="edit">Edit</button>

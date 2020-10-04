@@ -27,7 +27,7 @@ from rest_framework.viewsets import ViewSet, ModelViewSet
 from cms.models import Price
 from files.models import File, FileCategory
 from orders.models import Order
-from orders.services import incriminate_order_id
+from orders.services import create_order
 from outer_modules.modulbank import get_signature
 from users.forms import UserEditForm
 from users.models import User, UserStatus
@@ -50,11 +50,10 @@ def generate_payment(request):
     email = request.POST.get('email')
     amount = request.POST.get('amount')
     is_recurrent = True if request.POST.get('recurrent') else False
-    order_id = incriminate_order_id()
     body = {
         'merchant': os.getenv('MODULBANK_MERCHANT_ID'),
         'amount': amount,
-        'order_id': order_id,
+        'order_id': create_order(amount, is_recurrent),
         'client_name': username,
         'client_email': email,
         'description': 'Оплата доступа в блог',
@@ -80,10 +79,6 @@ def generate_payment(request):
             os.getenv('MODULBANK_SECRET_KEY'), body)
     }
     body.update(signature)
-    Order.objects.create(order_id=order_id,
-                         amount=int(float(amount)),
-                         is_paid=False,
-                         is_recurrent=is_recurrent)
     return render(request, 'users/generate_payment.html', body)
 
 
@@ -268,5 +263,5 @@ class RenewSubscription(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['prices'] = Price.objects.all()
+        context['prices'] = Price.objects.filter(hidden=False)
         return context

@@ -1,13 +1,12 @@
 import logging
 from operator import attrgetter
 
-from orders.services import incriminate_order_id
+from orders.services import create_order
 from outer_modules.modulbank import is_signature_ok
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Max
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -16,7 +15,6 @@ from django.utils.crypto import get_random_string
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, DeleteView
 from dotenv import load_dotenv
-from django.db import transaction
 
 from cms.models import Price
 from cms.tasks import send_email
@@ -143,9 +141,7 @@ class OrderCreate(CreateView):
                 result = 'Order created'
 
             if data.get('is_admin'):
-                with transaction.atomic():
-                    order_id = incriminate_order_id()
-                    Order.objects.create(order_id=order_id, amount=amount, is_paid=False)
+                create_order(amount)
 
             order = Order.objects.get(order_id=order_id)
             order.username = User.objects.get(username=username)
@@ -165,4 +161,4 @@ class OrderCreate(CreateView):
         if data.get('is_admin'):
             return render(request, 'orders/create_order.html', context={'result': result})
         else:
-            return HttpResponse('OK', status=200)
+            return HttpResponse(result, status=200)

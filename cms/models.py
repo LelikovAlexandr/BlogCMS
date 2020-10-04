@@ -8,6 +8,7 @@ from django.template import Context
 class Price(models.Model):
     number_of_months = models.IntegerField(unique=True)
     price = models.IntegerField()
+    hidden = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["number_of_months"]

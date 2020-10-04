@@ -153,7 +153,7 @@ class PriceCreate(LoginRequiredMixin, CreateView):
     Add new price for period
     """
     model = Price
-    fields = ('price', 'number_of_months')
+    fields = ('price', 'number_of_months', 'hidden')
     template_name = 'cms/create_price.html'
     success_url = reverse_lazy('PriceList')
 
@@ -171,7 +171,7 @@ class PriceUpdate(LoginRequiredMixin, UpdateView):
     Update price for period
     """
     model = Price
-    fields = ('price', 'number_of_months')
+    fields = ('price', 'number_of_months', 'hidden')
     success_url = reverse_lazy('PriceList')
     template_name = 'cms/update_price.html'
 
