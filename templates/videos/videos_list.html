@@ -36,10 +36,7 @@
                         {% for video in video_list %}
                             <tr>
                                 <td class="align-middle">
-                                    <iframe allowfullscreen=""
-                                            src="https://www.youtube.com/embed/{{ video.video_code }}?iv_load_policy=3&modestbranding=1"
-                                            width="160"
-                                            height="90"></iframe>
+                                    <img src="{{ video.get_image_url|default_if_none:'#' }}" height="90" width="160">
                                 </td>
                                 <td class="align-middle"><a href="{% url 'UpdateVideo' slug=video.slug %}">{{ video.caption }}</a></td>
                                 <td class="align-middle">{{ video.publish_date }}</td>

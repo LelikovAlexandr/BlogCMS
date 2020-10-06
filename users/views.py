@@ -21,8 +21,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import DeleteView, UpdateView
-from rest_framework.pagination import PageNumberPagination, CursorPagination
-from rest_framework.viewsets import ViewSet, ModelViewSet
+from rest_framework.pagination import CursorPagination, PageNumberPagination
+from rest_framework.viewsets import ModelViewSet, ViewSet
 
 from cms.models import Price
 from files.models import File, FileCategory
@@ -49,11 +49,12 @@ def generate_payment(request):
     username = request.POST.get('username').replace('@', '').replace(' ', '').lower()
     email = request.POST.get('email')
     amount = request.POST.get('amount')
+    promo_code = request.POST.get('promoCode')
     is_recurrent = True if request.POST.get('recurrent') else False
     body = {
         'merchant': os.getenv('MODULBANK_MERCHANT_ID'),
         'amount': amount,
-        'order_id': create_order(amount, is_recurrent),
+        'order_id': create_order(amount, promo_code, is_recurrent),
         'client_name': username,
         'client_email': email,
         'description': 'Оплата доступа в блог',

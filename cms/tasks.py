@@ -2,8 +2,10 @@ import datetime
 import logging
 import os
 from time import sleep
+
 import requests
 from celery import shared_task
+from django.core.exceptions import ObjectDoesNotExist
 
 from cms.models import EmailTemplate
 from cms.services import create_payment_body
@@ -43,7 +45,11 @@ def send_recurrent_payment(days_to_unsubscribe):
     for user in User.objects.filter(subscribe_until=datetime.datetime.now().date() +
                                                     datetime.timedelta(days_to_unsubscribe),
                                     recurring_payments=True):
-        recurrent_payment = RecurrentPayment.objects.get(username_id=user.pk)
+        try:
+            recurrent_payment = RecurrentPayment.objects.get(username_id=user.pk)
+        except ObjectDoesNotExist:
+            logger.warning('{0} haven\'t transaction id for recurrent payment'.format(user.username))
+            continue
         transaction_id = recurrent_payment.transaction_id
         amount = recurrent_payment.amount
         payment_body = create_payment_body(user, transaction_id, amount)

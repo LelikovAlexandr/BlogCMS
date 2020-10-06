@@ -1,5 +1,6 @@
 import csv
 import os
+from datetime import datetime
 from operator import attrgetter
 
 import requests
@@ -8,7 +9,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.db.models import Count, Min, Q, Sum
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -16,7 +17,7 @@ from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from cms.models import Article as ArticleModel
-from cms.models import Price
+from cms.models import Price, Promocode
 from orders.models import Order
 from users.models import User, UserStatus
 
@@ -92,6 +93,12 @@ def echo_to_telegram(request):
     return HttpResponse('OK', status=200)
 
 
+def check_promo_code(request):
+    promo_code = request.GET.get('promoCode').lower()
+    discount = get_object_or_404(Promocode, code=promo_code)
+    return JsonResponse(discount.discount, safe=False)
+
+
 class AdminDashboard(TemplateView):
     """
     Admin's dashboard
@@ -148,6 +155,19 @@ class Article(TemplateView):
         return context
 
 
+class RecurrentUsers(TemplateView):
+    """
+    Generate page with list of users with active recurrent payments
+    """
+    template_name = 'cms/recurrent_users.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['users'] = User.objects.filter(subscribe_until__gte=datetime.now().date(),
+                                               recurring_payments=True)
+        return context
+
+
 class PriceCreate(LoginRequiredMixin, CreateView):
     """
     Add new price for period
@@ -184,6 +204,47 @@ class PriceDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('PriceList')
 
 
+class PromoCodeCreate(LoginRequiredMixin, CreateView):
+    """
+    Add new promo code
+    """
+    model = Promocode
+    fields = '__all__'
+    template_name = 'cms/create_promo_code.html'
+    success_url = reverse_lazy('PromoCodeList')
+
+
+class PromoCodeList(LoginRequiredMixin, ListView):
+    """
+    Show promo code list
+    """
+    model = Promocode
+    template_name = 'cms/promo_code_list.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['users'] = User.objects.all()
+        return context
+
+
+class PromoCodeUpdate(LoginRequiredMixin, UpdateView):
+    """
+    Update promo code
+    """
+    model = Promocode
+    fields = '__all__'
+    success_url = reverse_lazy('PromoCodeList')
+    template_name = 'cms/update_promo_code.html'
+
+
+class PromoCodeDelete(LoginRequiredMixin, DeleteView):
+    """
+    Delete promo code
+    """
+    model = Promocode
+    success_url = reverse_lazy('PromoCodeList')
+
+
 class UnsubscribeChart(TemplateView):
     """
     Show chart of unsubscribe users for a month in advance
@@ -204,3 +265,7 @@ class UnsubscribeChart(TemplateView):
         context['unsubscribers'] = unsubscribers
         context['days'] = days
         return context
+
+
+def handler404(request, exception):
+    return render(request, 'errors/404.html', status=404)

@@ -2,6 +2,27 @@
 {% load static %}
 {% block title %}Личный кабинет{% endblock %}
 {% block content %}
+    <style>
+        .bs-example {
+            margin: 20px;
+        }
+
+        .modal-content iframe {
+            margin: 0 auto;
+            display: block;
+        }
+    </style>
+    <script>
+        
+        function showVideo(url) {
+            $("#Modal").on('hide.bs.modal', function () {
+                $("#frame").attr('src', '');
+            });
+            $("#Modal").on('show.bs.modal', function () {
+                $("#frame").attr('src', `https://www.youtube.com/embed/${url}?iv_load_policy=3&modestbranding=1`);
+            });
+        }
+    </script>
     <div class="container">
         <div class="intro">
             <h2 class="text-center">Видео</h2>
@@ -12,19 +33,23 @@
         <div class="row projects">
             {% for video in user.available_video.all %}
                 <div class="col-sm-12 col-lg-6 col-xl-4 item">
-                    <iframe allowfullscreen=""
-                            src="https://www.youtube.com/embed/{{ video.video_code }}?iv_load_policy=3&modestbranding=1"
-                            width="320"
-                            height="180"></iframe>
-                    <h3 class="name">{{ video.caption }}</h3>
+                    <a href="#Modal" data-toggle="modal" onclick="showVideo('{{ video.video_code }}')"><img src="{{ video.get_image_url|default_if_none:'#' }}" width="320" height="180"></a>
+                    <a href="#Modal" data-toggle="modal" onclick="showVideo('{{ video.video_code }}')"><h3 class="name">{{ video.caption }}</h3></a>
                     <p class="description">{{ video.description }}</p>
-                    <div>
-                        {% for tag in video.tags.all %}
-                            <span class="badge badge-pill badge-secondary">{{ tag }}</span>
-                        {% endfor %}
-                    </div>
                 </div>
             {% endfor %}
+        </div>
+    </div>
+
+    <div class="bs-example">
+        <div id="Modal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <iframe id="frame" width="450" height="350" src="" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

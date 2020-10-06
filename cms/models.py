@@ -4,9 +4,11 @@ from django.core.mail import EmailMultiAlternatives, send_mail
 from django.db import models
 from django.template import Context
 
+from users.models import User
+
 
 class Price(models.Model):
-    number_of_months = models.IntegerField(unique=True)
+    number_of_months = models.IntegerField()
     price = models.IntegerField()
     hidden = models.BooleanField(default=False)
 
@@ -34,6 +36,15 @@ class Article(models.Model):
 
     def __str__(self):
         return self.caption
+
+
+class Promocode(models.Model):
+    code = models.CharField(max_length=50, default=None, null=True)
+    discount = models.IntegerField()
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return self.owner
 
 
 class EmailTemplate(models.Model):

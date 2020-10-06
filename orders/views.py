@@ -1,8 +1,6 @@
 import logging
 from operator import attrgetter
 
-from orders.services import create_order
-from outer_modules.modulbank import is_signature_ok
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -20,6 +18,8 @@ from cms.models import Price
 from cms.tasks import send_email
 from files.models import File
 from orders.models import Order, RecurrentPayment
+from orders.services import create_order
+from outer_modules.modulbank import is_signature_ok
 from users.models import User, UserStatus
 
 logger = logging.getLogger(__name__)

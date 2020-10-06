@@ -19,6 +19,7 @@
     <link rel="manifest" href="{% static 'media/favicons/site.webmanifest' %}">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 {% if user.is_authenticated %}
 <body id="page-top">
@@ -49,6 +50,10 @@
                         class="fas fa-user-circle"></i><span>Видео</span></a></li>
                 <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'FilesList' %}"><i
                         class="fas fa-user-circle"></i><span>Библиотека</span></a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'PromoCodeList' %}"><i
+                        class="fas fa-user-circle"></i><span>Промокоды</span></a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'RecurrentUser' %}"><i
+                        class="fas fa-user-circle"></i><span>Рекуррентные</span></a></li>
             </ul>
             <div class="text-center d-none d-md-inline">
                 <button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button>
@@ -94,7 +99,6 @@
         </footer>
     </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
 <script src="{% static 'assets/js/script.min.js' %}"></script>
