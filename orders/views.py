@@ -113,7 +113,7 @@ class OrderCreate(CreateView):
         username = data.get('client_name').replace('@', '').replace(' ', '').lower()
         amount = int(float(data.get('amount')))
         order_id = data.get('order_id')
-        transaction_id = data.get('transaction_id')
+        # transaction_id = data.get('transaction_id')
 
         if is_signature_ok(data) and is_uniq_order(order_id, amount, username):
 
@@ -124,7 +124,7 @@ class OrderCreate(CreateView):
                 user.email = data.get('client_email')
                 user.set_password(user.init_password)
             start_new_period, template = calculate_new_period(create, user)
-            user.subscribe_until = start_new_period + relativedelta(months=number_of_months)
+            user.subscribe_until = start_new_period + relativedelta(days=number_of_months)
             user.available_file.add(*File.objects.values_list('id', flat=True))
             user.save()
 
@@ -147,10 +147,10 @@ class OrderCreate(CreateView):
             order.username = User.objects.get(username=username)
             if not data.get('is_free_user'):
                 order.is_paid = True
-            if order.is_recurrent:
-                user.recurring_payments = True
-                add_recurrent_payment(user.username, transaction_id, amount)
-                user.save()
+            # if order.is_recurrent:
+            #     user.recurring_payments = True
+            #     add_recurrent_payment(user.username, transaction_id, amount)
+            #     user.save()
             order.save()
 
             logger.debug(

@@ -93,34 +93,19 @@
                                        placeholder="Введите Email"
                                        name="email"
                                        value="{{ user.email }}" required/>
-                                <div class="d-flex justify-content-start mt-1">
-                                    <small
-                                            onclick="$('#promoCodeInput, #promoCodeButton').toggle();"
-                                            style="border-bottom: 1px dotted;">Есть промокод</small>
-                                </div>
-                                <div class="d-flex">
-                                    <input type="text" class="form-control form-control-user mt-2"
-                                           placeholder="Промокод" name="promoCode" id="promoCodeInput"
-                                           value="" style="display:none;"/>
-                                    <button type="button" onclick="check_code()"
-                                            class="btn-outline-success btn m-2     "
-                                            id="promoCodeButton" style="display:none;">Ok
-                                    </button>
-                                </div>
-                                <div class="d-flex justify-content-center mt-1">
-                                    <span id="promoCodeResult"></span>
-                                </div>
 
                             </div>
                             <select class="custom-select mt-0 mb-2" name="price" id="prices">
                                 {% for price in prices %}
                                     <option value="{{ price.price }}.00">{{ price.number_of_months }}
-                                        {% if price.number_of_months == 1 %}
-                                            месяц,
-                                        {% elif price.number_of_months < 5 %}
-                                            месяца,
+                                        {% if price.number_of_months|slugify|slice:"1:" == '1' %}
+                                            день,
+                                        {% elif price.number_of_months|slugify|slice:"1:" == '0' %}
+                                            дней,
+                                        {% elif price.number_of_months|slugify|slice:"1:" < '5' %}
+                                            дня,
                                         {% else %}
-                                            месяцев,
+                                            дней,
                                         {% endif %}
                                         {{ price.price }}₽
                                     </option>
@@ -133,15 +118,6 @@
                                 <label class="form-check-label" for="offer">Я принимаю условия <a
                                         href="/admin/article/offer/">оферты</a></label>
                             </div>
-                            {% if not user.recurring_payments %}
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="recurrent" name="recurrent"/>
-                                    <label class="form-check-label" for="recurrent">Автоматически продлить подписку
-                                        после ее окончания. Я принимаю <a href="/admin/article/recurrent">оферту
-                                            регулярных
-                                            платежей</a></label>
-                                </div>
-                            {% endif %}
                             <div class="alert alert-danger mt-2 mb-0" id="message" hidden></div>
                             <button
                                     class="btn btn-primary btn-block text-white btn-user mt-2 col-12"

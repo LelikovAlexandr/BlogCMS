@@ -7,13 +7,13 @@ import requests
 from celery import shared_task
 from django.core.exceptions import ObjectDoesNotExist
 
-from cms.models import EmailTemplate
+from cms.models import EmailTemplate, Price
 from cms.services import create_payment_body
 from orders.models import RecurrentPayment
 from users.models import User
 
 logger = logging.getLogger(__name__)
-DAYS_TO_UNSUBSCRIBE = 3
+DAYS_TO_UNSUBSCRIBE = 1
 
 
 @shared_task
@@ -48,9 +48,20 @@ def send_recurrent_payment(days_to_unsubscribe):
         try:
             recurrent_payment = RecurrentPayment.objects.get(username_id=user.pk)
         except ObjectDoesNotExist:
-            logger.warning('{0} haven\'t transaction id for recurrent payment'.format(user.username))
+            logger.warning(
+                '{0} haven\'t transaction id for recurrent payment'.format(user.username))
             continue
         transaction_id = recurrent_payment.transaction_id
         amount = recurrent_payment.amount
         payment_body = create_payment_body(user, transaction_id, amount)
         send_post_request.delay(payment_body, os.getenv('MODULBANK_API_RECURRENT_URL'))
+
+
+@shared_task
+def change_price():
+    if datetime.datetime.today() < datetime.datetime(2020, 12, 20, 23, 59):
+        price = Price.objects.all().first()
+        price.number_of_months = abs(
+            (datetime.datetime.today() - datetime.datetime(2020, 12, 20)).days)
+        price.price = price.number_of_months * 12
+        price.save()

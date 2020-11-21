@@ -50,7 +50,7 @@ def generate_payment(request):
     email = request.POST.get('email')
     amount = request.POST.get('amount')
     promo_code = request.POST.get('promoCode')
-    is_recurrent = True if request.POST.get('recurrent') else False
+    is_recurrent = False
     body = {
         'merchant': os.getenv('MODULBANK_MERCHANT_ID'),
         'amount': amount,
