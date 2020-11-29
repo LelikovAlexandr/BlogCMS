@@ -1,0 +1,66 @@
+{% extends 'users/main.html' %}
+{% load static %}
+{% block title %}Возврат денег{% endblock %}
+{% block content %}
+    <script>
+        function yesnoCheck() {
+            if (document.getElementById('card').checked) {
+                document.getElementById('card_number').style.visibility = 'visible';
+                document.getElementById('name').style.visibility = 'visible';
+                document.getElementById('card_number').required = true;
+                document.getElementById('name').required = true;
+            } else {
+                document.getElementById('card_number').style.visibility = 'hidden';
+                document.getElementById('name').style.visibility = 'hidden';
+                document.getElementById('card_number').required = false;
+                document.getElementById('name').required = false;
+            }
+        }
+    </script>
+    <div class="card shadow-lg o-hidden border-0 my-5">
+        <div class="card-body p-0">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="p-5">
+                        <div class="text-center">
+                            <h4 class="text-dark mb-2">
+                                Возврат денег
+                            </h4>
+                            <h5>Ваш остаток к возврату - <b>{{ balance }}₽</b></h5>
+                        </div>
+
+                        {% if user.refund_choice %}
+                            <div class="text-center">
+                         <h5>Вы выбрали вариант <b>{{ user.get_refund_choice_display }}</b></h5>
+                            </div>
+                        {% else %}
+                        <form id="renew" class="user" method="post" action="{% url 'RefundConfirm' %}">
+                            <div class="form-group">
+                                <div>
+                                    <input type="radio" name="refund_choice" id="charity" value="Charity" onclick="yesnoCheck()">
+                                    <label for="charity">Перевод в благотворительный фонд <a href="https://mayak.help">Дом
+                                        с
+                                        маяком</a></label>
+                                </div>
+                                <div>
+                                    <input type="radio" name="refund_choice" id="card" value="card"  onclick="yesnoCheck()" required>
+                                    <label for="card">Перевод на карту</label>
+                                </div>
+                                <input type="text" class="form-control form-control-user"
+                                       placeholder="Номер карты" name="card_number" id="card_number" style="visibility:hidden">
+                                <input type="text" class="form-control form-control-user mt-2"
+                                       placeholder="Фамилия Имя Отчество" name="name" id="name" style="visibility:hidden">
+                            </div>
+                            <button
+                                    class="btn btn-primary btn-block text-white btn-user mt-2 col-12"
+                                    type="submit">
+                                <span id="nextBtnText">Подтвердить</span>
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

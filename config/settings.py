@@ -77,7 +77,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'users.context_processors.category',
-                'users.context_processors.legal'
+                'users.context_processors.legal',
+                'users.context_processors.last_day'
             ],
         },
     },

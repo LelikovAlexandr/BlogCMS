@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+from datetime import datetime
 from operator import attrgetter
 from time import time
 
@@ -11,7 +12,6 @@ from django.contrib.auth.views import (LoginView, LogoutView,
                                        PasswordChangeView,
                                        PasswordResetCompleteView,
                                        PasswordResetConfirmView,
-                                       PasswordResetDoneView,
                                        PasswordResetView)
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -21,12 +21,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import DeleteView, UpdateView
-from rest_framework.pagination import CursorPagination, PageNumberPagination
-from rest_framework.viewsets import ModelViewSet, ViewSet
 
 from cms.models import Price
 from files.models import File, FileCategory
-from orders.models import Order
 from orders.services import create_order
 from outer_modules.modulbank import get_signature
 from users.forms import UserEditForm
@@ -266,3 +263,28 @@ class RenewSubscription(TemplateView):
         context = super().get_context_data(**kwargs)
         context['prices'] = Price.objects.filter(hidden=False)
         return context
+
+
+class Refund(TemplateView, LoginRequiredMixin):
+    template_name = 'users/refund.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['balance'] = (self.request.user.subscribe_until.day - datetime(2020, 12,
+                                                                              20).date().day) * 11.5
+        return context
+
+
+@require_POST
+def refund_confirm(request):
+    data = request.POST
+    user = User.objects.get(username=request.user)
+    if data['refund_choice'] == 'card':
+        user.card_number = data['card_number']
+        user.name_for_refund = data['name']
+        user.refund_choice = 'Card'
+        user.save()
+    else:
+        user.refund_choice = 'Charity'
+        user.save()
+    return HttpResponseRedirect(reverse_lazy('Refund'))

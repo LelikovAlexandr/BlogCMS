@@ -31,5 +31,7 @@ urlpatterns = [
     url('^renew/$', views.RenewSubscription.as_view(), name='RenewSubscription'),
     url('^renew/generate_payment/$', views.generate_payment, name='GeneratePayment'),
     url('^recurrent_payments_cancel/$', views.recurrent_payments_cancel,
-        name='RecurrentPaymentsCancel')
+        name='RecurrentPaymentsCancel'),
+    url('^refund/$', views.Refund.as_view(), name='Refund'),
+    url('^refund_confirm', views.refund_confirm, name='RefundConfirm')
 ]

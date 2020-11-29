@@ -56,6 +56,9 @@
                         <li class="nav-item" role="presentation"><a
                                 class="nav-link {% if request.resolver_match.url_name == "RenewSubscription" %}active{% endif %}"
                                 href="{% url 'RenewSubscription' %}">Продлить подписку</a></li>
+                        {% if user.subscribe_until > last_day %}
+                            <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'Refund' %}">Возврат денег</a></li>
+                        {% endif %}
                     </ul>
                     <ul class="nav navbar-nav">
                         {% if user.subscribe_until %}
@@ -71,7 +74,8 @@
                                     <a class="dropdown-item" role="presentation"
                                        href="{% url 'Dashboard' %}">Админка</a>
                                 {% endif %}
-                                <a class="dropdown-item" role="presentation" {% if user.recurring_payments %}onclick="deleteFunction()" href="#"{% endif %}>Автопродление
+                                <a class="dropdown-item" role="presentation"
+                                   {% if user.recurring_payments %}onclick="deleteFunction()" href="#"{% endif %}>Автопродление
                                     <input type="checkbox" {% if user.recurring_payments %}checked{% endif %} disabled></a>
                                 <a class="dropdown-item" role="presentation" href="{% url 'ChangeUserPassword' %}">Изменить
                                     пароль</a>
@@ -92,12 +96,12 @@
             <div class="row justify-content-center">
                 <div class="col-sm-4 col-md-3 item">
                     {% if legal %}
-                    <h3>Юридическая информация</h3>
-                    <ul>
-                    {% for document in legal %}
-                        <li><a href="{% url 'Article' slug=document.slug %}">{{ document.caption }}</a></li>
-                    {% endfor %}
-                    </ul>
+                        <h3>Юридическая информация</h3>
+                        <ul>
+                            {% for document in legal %}
+                                <li><a href="{% url 'Article' slug=document.slug %}">{{ document.caption }}</a></li>
+                            {% endfor %}
+                        </ul>
                     {% endif %}
                 </div>
                 <div class="col-sm-4 col-md-3 item">

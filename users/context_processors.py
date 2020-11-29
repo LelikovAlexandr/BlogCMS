@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.core.exceptions import ObjectDoesNotExist
 
 from cms.models import Article, ArticleCategory
@@ -11,6 +13,11 @@ def category(request):
 
 def legal(request):
     try:
-        return {'legal': Article.objects.filter(category=ArticleCategory.objects.get(name='legal'))}
+        return {
+            'legal': Article.objects.filter(category=ArticleCategory.objects.get(name='legal'))}
     except ObjectDoesNotExist:
         return {'legal': {}}
+
+
+def last_day(request):
+    return {'last_day': datetime(2020, 12, 20).date()}
