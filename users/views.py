@@ -270,8 +270,8 @@ class Refund(TemplateView, LoginRequiredMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['balance'] = (self.request.user.subscribe_until.day - datetime(2020, 12,
-                                                                              20).date().day) * 11.5
+        context['balance'] = (self.request.user.subscribe_until - datetime(2020, 12,
+                                                                              20).date()).days * 11.5
         return context
 
 
