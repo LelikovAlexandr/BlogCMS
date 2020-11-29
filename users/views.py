@@ -276,9 +276,10 @@ class Refund(TemplateView, LoginRequiredMixin):
 
 
 @require_POST
+@login_required
 def refund_confirm(request):
     data = request.POST
-    user = User.objects.get(username=request.user)
+    user = User.objects.get(username=request.user.get_username())
     if data['refund_choice'] == 'card':
         user.card_number = data['card_number']
         user.name_for_refund = data['name']
