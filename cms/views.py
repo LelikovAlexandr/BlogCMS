@@ -267,5 +267,14 @@ class UnsubscribeChart(TemplateView):
         return context
 
 
+class RefundList(TemplateView):
+    template_name = 'cms/refunds.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['users'] = User.objects.exclude(refund_choice__isnull=True)
+        return context
+
+
 def handler404(request, exception):
     return render(request, 'errors/404.html', status=404)

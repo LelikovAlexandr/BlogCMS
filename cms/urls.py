@@ -27,5 +27,6 @@ urlpatterns = [
     url(r'^article/(?P<slug>[\w-]+)/$', views.Article.as_view(), name='Article'),
     url(r'^echo/$', views.echo_to_telegram),
     url(r'^check_code/$', views.check_promo_code),
-    url(r'^recurrent_users/$', views.RecurrentUsers.as_view(), name='RecurrentUser')
+    url(r'^recurrent_users/$', views.RecurrentUsers.as_view(), name='RecurrentUser'),
+    url(r'^refund/$', views.RefundList.as_view(), name='RefundList')
 ]
