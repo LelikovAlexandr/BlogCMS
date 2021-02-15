@@ -8,7 +8,7 @@ from celery import shared_task
 from django.core.exceptions import ObjectDoesNotExist
 
 from cms.models import EmailTemplate, Price
-from cms.services import create_payment_body
+from cms.services import create_payment_body, send_every_ten_customer
 from orders.models import RecurrentPayment
 from users.models import User
 
@@ -65,3 +65,8 @@ def change_price():
             (datetime.datetime.today() - datetime.datetime(2020, 12, 20)).days)
         price.price = price.number_of_months * 12
         price.save()
+
+
+@shared_task
+def count_new_orders():
+    send_every_ten_customer()
