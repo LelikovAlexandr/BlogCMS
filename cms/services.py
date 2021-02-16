@@ -81,5 +81,6 @@ def send_every_ten_customer():
         if orders_count >= 10:
             send_to_telegram(orders_count)
             cache.set('orders_count', 0)
-        cache.set('orders_count', orders_count, timeout=60 * 60 * 24 * 7)
+        else:
+            cache.set('orders_count', orders_count, timeout=60 * 60 * 24 * 7)
     cache.set('last_order_time', last_order_time)
